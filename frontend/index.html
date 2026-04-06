@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReadmeAI — Generate READMEs from GitHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0C0C0D;
+      --surface:     #111521;
+      --surface-2:   #161c2e;
+      --border:      #1e2a42;
+      --border-glow: #2a3d6e;
+      --accent:      #4f8aff;
+      --accent-dim:  #2a4d8a;
+      --accent-text: #7aaeff;
+      --green:       #2dce7e;
+      --red:         #ff4f4f;
+      --yellow:      #f5c342;
+      --text:        #e8eaf2;
+      --text-2:      #8892aa;
+      --text-3:      #4a5568;
+      --mono:        'DM Mono', monospace;
+      --display:     'Bebas Neue', sans-serif;
+      --body:        'Syne', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID NOISE BACKGROUND ────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79,138,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,138,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ───────────────────────────────────────────────── */
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(12,12,13,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .logo-name {
+      font-family: var(--display);
+      font-size: 26px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+    }
+
+    .logo-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: inline-block;
+      margin-bottom: 2px;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(79,138,255,0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(79,138,255,0); }
+    }
+
+    .header-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 72px 40px 48px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 5px 14px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent-text);
+      letter-spacing: 0.12em;
+      margin-bottom: 28px;
+    }
+
+    .hero-eyebrow-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+
+    .hero-title {
+      font-family: var(--display);
+      font-size: clamp(52px, 8vw, 96px);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+      position: relative;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--text-2);
+      max-width: 480px;
+      margin: 0 auto 48px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    /* ── MAIN CARD ────────────────────────────────────────────── */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+
+    .card-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .card-dot.red   { background: #ff5f57; }
+    .card-dot.amber { background: #febc2e; }
+    .card-dot.green { background: #28c840; }
+
+    .card-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.1em;
+      margin-left: 8px;
+    }
+
+    .card-body {
+      padding: 28px;
+    }
+
+    /* ── INPUT GROUP ──────────────────────────────────────────── */
+    .input-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .input-prefix {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent-text);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 13px 14px 13px 46px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent-dim);
+      box-shadow: 0 0 0 3px rgba(79,138,255,0.08);
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--text-3);
+    }
+
+    /* ── OPTIONS ROW ──────────────────────────────────────────── */
+    .options-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .option-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .toggle-group {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      padding: 7px 14px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      letter-spacing: 0.06em;
+    }
+
+    .toggle-btn:not(:last-child) {
+      border-right: 1px solid var(--border);
+    }
+
+    .toggle-btn.active {
+      background: var(--accent-dim);
+      color: var(--accent-text);
+    }
+
+    .toggle-btn:hover:not(.active) {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .checkbox-row {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+    }
+
+    .checkbox-item input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 5px;
+      height: 9px;
+      border: 2px solid var(--accent-text);
+      border-left: none;
+      border-top: none;
+      transform: rotate(45deg);
+    }
+
+    .checkbox-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-2);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── SUBMIT BUTTON ────────────────────────────────────────── */
+    .btn-generate {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 15px 24px;
+      font-family: var(--display);
+      font-size: 18px;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-generate::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.5s;
+    }
+
+    .btn-generate:hover::after {
+      transform: translateX(100%);
+    }
+
+    .btn-generate:hover {
+      background: #3a78f0;
+      box-shadow: 0 4px 24px rgba(79,138,255,0.3);
+    }
+
+    .btn-generate:active {
+      transform: scale(0.99);
+    }
+
+    .btn-generate:disabled {
+      background: var(--accent-dim);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-generate:disabled::after { display: none; }
+
+    /* ── STATUS BAR ───────────────────────────────────────────── */
+    .status-bar {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-2);
+    }
+
+    .status-bar.visible { display: flex; }
+
+    .status-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-dot.green  { background: var(--green); }
+    .status-dot.red    { background: var(--red); }
+    .status-dot.yellow { background: var(--yellow); }
+
+    .status-text { flex: 1; }
+    .status-time {
+      font-size: 10px;
+      color: var(--text-3);
+      margin-left: auto;
+    }
+
+    /* ── OUTPUT SECTION ───────────────────────────────────────── */
+    #output-section {
+      margin-top: 32px;
+      display: none;
+    }
+
+    #output-section.visible { display: block; }
+
+    .output-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 10px 20px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      transition: color 0.15s, border-color 0.15s;
+      margin-bottom: -1px;
+    }
+
+    .tab-btn.active {
+      color: var(--accent-text);
+      border-bottom-color: var(--accent);
+    }
+
+    .tab-btn:hover:not(.active) { color: var(--text-2); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── MARKDOWN PREVIEW ─────────────────────────────────────── */
+    #preview-panel {
+      padding: 32px;
+      background: var(--bg);
+      min-height: 400px;
+      border-top: none;
+    }
+
+    .md-body {
+      font-family: var(--body);
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      max-width: 720px;
+    }
+
+    .md-body h1 {
+      font-family: var(--display);
+      font-size: 40px;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .md-body h2 {
+      font-family: var(--display);
+      font-size: 28px;
+      letter-spacing: 0.04em;
+      margin-top: 40px;
+      margin-bottom: 12px;
+      color: var(--accent-text);
+    }
+
+    .md-body h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 28px;
+      margin-bottom: 8px;
+      color: var(--text-2);
+    }
+
+    .md-body p { margin-bottom: 14px; color: var(--text-2); }
+
+    .md-body code {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 2px;
+      color: var(--accent-text);
+    }
+
+    .md-body pre {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    .md-body pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .md-body ul, .md-body ol {
+      padding-left: 20px;
+      margin-bottom: 14px;
+      color: var(--text-2);
+    }
+
+    .md-body li { margin-bottom: 4px; }
+
+    .md-body a {
+      color: var(--accent-text);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-dim);
+    }
+
+    .md-body a:hover { border-bottom-color: var(--accent); }
+
+    .md-body blockquote {
+      border-left: 3px solid var(--accent-dim);
+      padding-left: 16px;
+      color: var(--text-2);
+      margin: 16px 0;
+    }
+
+    .md-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+
+    .md-body th {
+      background: var(--surface-2);
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.08em;
+    }
+
+    .md-body td {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      color: var(--text-2);
+    }
+
+    .md-body img {
+      max-width: 100%;
+      border-radius: 3px;
+    }
+
+    /* ── RAW TAB ──────────────────────────────────────────────── */
+    #raw-panel {
+      position: relative;
+      background: var(--bg);
+    }
+
+    #raw-output {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-2);
+      background: var(--bg);
+      border: none;
+      width: 100%;
+      padding: 24px;
+      min-height: 400px;
+      resize: vertical;
+      outline: none;
+      line-height: 1.6;
+    }
+
+    /* ── METADATA TAB ─────────────────────────────────────────── */
+    #meta-panel {
+      padding: 24px;
+      background: var(--bg);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .meta-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 14px;
+    }
+
+    .meta-card-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .meta-card-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .meta-card-value.small {
+      font-size: 13px;
+      font-family: var(--mono);
+      color: var(--accent-text);
+    }
+
+    .meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .meta-tag {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 4px 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-2);
+    }
+
+    .meta-tag.lang { border-color: var(--accent-dim); color: var(--accent-text); }
+    .meta-tag.ci   { border-color: #2d6e44; color: var(--green); }
+    .meta-tag.test { border-color: #4a3a0e; color: var(--yellow); }
+
+    /* ── FEEDBACK / REGENERATE ────────────────────────────────── */
+    #feedback-panel {
+      padding: 24px;
+      background: var(--bg);
+    }
+
+    textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 14px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      resize: vertical;
+      min-height: 100px;
+      transition: border-color 0.2s;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    textarea:focus { border-color: var(--accent-dim); }
+    textarea::placeholder { color: var(--text-3); }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text-2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 11px 22px;
+      font-family: var(--mono);
+      font-size: 12px;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-2);
+      color: var(--text);
+      border-color: var(--border-glow);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    /* ── COPY BUTTON ──────────────────────────────────────────── */
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 6px 12px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-2);
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      transition: all 0.15s;
+      z-index: 5;
+    }
+
+    .copy-btn:hover { color: var(--accent-text); border-color: var(--accent-dim); }
+    .copy-btn.copied { color: var(--green); border-color: #2d6e44; }
+
+    /* ── STATS BAR ────────────────────────────────────────────── */
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 10px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+
+    .stat-item {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      letter-spacing: 0.08em;
+    }
+
+    .stat-item span {
+      color: var(--text-2);
+      margin-left: 4px;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 32px;
+      border-top: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── ANIMATIONS ───────────────────────────────────────────── */
+    .fade-in {
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      header { padding: 16px 20px; }
+      .hero  { padding: 48px 20px 32px; }
+      .card-body { padding: 20px; }
+      .input-row { flex-direction: column; }
+      #preview-panel { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <span class="logo-name">README<span style="color:var(--accent)">AI</span></span>
+      <span class="logo-dot"></span>
+    </div>
+    <span class="header-meta">V1.0.0</span>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      GITHUB → GROK → MARKDOWN
+    </div>
+    <h1 class="hero-title">GENERATE<br><span>README</span><br>FILES</h1>
+    <p class="hero-sub">
+      Paste any public GitHub repo URL. We parse the codebase, detect your stack, and generate a production-quality README in seconds.
+    </p>
+  </section>
+
+  <!-- MAIN -->
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot red"></div>
+        <div class="card-dot amber"></div>
+        <div class="card-dot green"></div>
+        <span class="card-title">readme-generator.sh</span>
+      </div>
+      <div class="card-body">
+
+        <!-- URL INPUT -->
+        <div class="input-row">
+          <div class="input-wrap">
+            <span class="input-prefix">gh/</span>
+            <input
+              type="text"
+              id="repo-url"
+              placeholder="github.com/owner/repository"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+        </div>
+
+        <!-- OPTIONS -->
+        <div class="options-row">
+          <div class="option-group">
+            <span class="option-label">STYLE</span>
+            <div class="toggle-group" id="style-toggle">
+              <button class="toggle-btn" data-val="minimal">MINIMAL</button>
+              <button class="toggle-btn active" data-val="standard">STANDARD</button>
+              <button class="toggle-btn" data-val="detailed">DETAILED</button>
+            </div>
+          </div>
+
+          <div class="option-group" style="margin-left: auto;">
+            <span class="option-label">OPTIONS</span>
+            <div class="checkbox-row">
+              <label class="checkbox-item">
+                <input type="checkbox" id="include-badges" checked />
+                <span class="checkbox-label">BADGES</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" id="include-toc" checked />
+                <span class="checkbox-label">TABLE OF CONTENTS</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- GENERATE BUTTON -->
+        <button class="btn-generate" id="generate-btn" onclick="handleGenerate()">
+          GENERATE README
+        </button>
+
+        <!-- STATUS BAR -->
+        <div class="status-bar" id="status-bar">
+          <div class="status-spinner" id="status-spinner"></div>
+          <span class="status-text" id="status-text">Parsing repository...</span>
+          <span class="status-time" id="status-time"></span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div id="output-section">
+      <div class="card fade-in" style="margin-top:24px;">
+
+        <div class="card-header" style="justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div class="card-dot red"></div>
+            <div class="card-dot amber"></div>
+            <div class="card-dot green"></div>
+            <span class="card-title" id="output-repo-name">output.md</span>
+          </div>
+          <button class="btn-secondary" style="padding: 6px 12px; font-size: 10px;" onclick="downloadRaw()">DOWNLOAD .MD</button>
+        </div>
+
+        <div class="output-tabs">
+          <button class="tab-btn active" data-tab="preview">PREVIEW</button>
+          <button class="tab-btn" data-tab="raw">RAW MARKDOWN</button>
+          <button class="tab-btn" data-tab="meta">REPO METADATA</button>
+          <button class="tab-btn" data-tab="feedback">REVISE</button>
+        </div>
+
+        <!-- PREVIEW -->
+        <div class="tab-panel active" id="tab-preview">
+          <div id="preview-panel">
+            <div class="md-body" id="md-render"></div>
+          </div>
+        </div>
+
+        <!-- RAW -->
+        <div class="tab-panel" id="tab-raw">
+          <div id="raw-panel">
+            <button class="copy-btn" id="copy-btn" onclick="copyRaw()">COPY</button>
+            <textarea id="raw-output" spellcheck="false" readonly></textarea>
+          </div>
+        </div>
+
+        <!-- META -->
+        <div class="tab-panel" id="tab-meta">
+          <div id="meta-panel">
+            <div class="meta-grid" id="meta-grid"></div>
+            <div class="meta-tags" id="meta-tags"></div>
+          </div>
+        </div>
+
+        <!-- FEEDBACK / REGENERATE -->
+        <div class="tab-panel" id="tab-feedback">
+          <div id="feedback-panel">
+            <p style="font-family:var(--mono); font-size:11px; color:var(--text-3); letter-spacing:0.08em; margin-bottom:12px;">
+              DESCRIBE WHAT TO CHANGE
+            </p>
+            <textarea
+              id="feedback-input"
+              placeholder="e.g. Add a Contributing section, make installation steps more detailed, the description is too vague..."
+            ></textarea>
+            <div class="btn-row">
+              <button class="btn-secondary" onclick="handleRegenerate()">REGENERATE WITH FEEDBACK</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATS BAR -->
+        <div class="stats-bar" id="stats-bar">
+          <div class="stat-item">SCORE<span id="stat-score" style="color:var(--accent);font-weight:600;">—</span></div>
+          <div class="stat-item">TOKENS<span id="stat-tokens">—</span></div>
+          <div class="stat-item">LINES<span id="stat-lines">—</span></div>
+          <div class="stat-item">LANGUAGE<span id="stat-lang">—</span></div>
+          <div class="stat-item">GENERATED<span id="stat-time">—</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    READMEAI · GROK · GITHUB API · BUILT WITH FASTAPI
+  </footer>
+
+<script>
+  const API_BASE = 'http://localhost:8000';
+
+  let currentStyle = 'standard';
+  let currentReadme = '';
+  let currentRepoUrl = '';
+  let startTime = null;
+
+  // ── Style toggle ───────────────────────────────────────────────
+  document.querySelectorAll('#style-toggle .toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#style-toggle .toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentStyle = btn.dataset.val;
+    });
+  });
+
+  // ── Tab switching ──────────────────────────────────────────────
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`tab-${tab}`).classList.add('active');
+    });
+  });
+
+  // ── Enter key on input ─────────────────────────────────────────
+  document.getElementById('repo-url').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleGenerate();
+  });
+
+  // ── Normalize URL ──────────────────────────────────────────────
+  function normalizeUrl(raw) {
+    raw = raw.trim().replace(/\/$/, '');
+    if (!raw.startsWith('http')) raw = 'https://' + raw;
+    return raw;
+  }
+
+  // ── Status helpers ─────────────────────────────────────────────
+  function setStatus(type, msg) {
+    const bar    = document.getElementById('status-bar');
+    const spinner = document.getElementById('status-spinner');
+    const dot    = bar.querySelector('.status-dot');
+    const text   = document.getElementById('status-text');
+    const time   = document.getElementById('status-time');
+
+    bar.classList.add('visible');
+
+    // Remove existing dot
+    if (dot) dot.remove();
+
+    if (type === 'loading') {
+      spinner.style.display = 'block';
+      if (startTime) {
+        const el = setInterval(() => {
+          time.textContent = ((Date.now() - startTime) / 1000).toFixed(1) + 's';
+        }, 100);
+        bar._timer = el;
+      }
+    } else {
+      spinner.style.display = 'none';
+      clearInterval(bar._timer);
+      const newDot = document.createElement('div');
+      newDot.className = `status-dot ${type === 'success' ? 'green' : type === 'error' ? 'red' : 'yellow'}`;
+      bar.insertBefore(newDot, text);
+    }
+    text.textContent = msg;
+  }
+
+  function hideStatus() {
+    document.getElementById('status-bar').classList.remove('visible');
+  }
+
+  // ── Render metadata panel ──────────────────────────────────────
+  function renderMeta(meta, tokensUsed) {
+    const grid = document.getElementById('meta-grid');
+    const tags = document.getElementById('meta-tags');
+
+    const stats = [
+      { label: 'STARS',      value: meta.stars.toLocaleString() },
+      { label: 'FORKS',      value: meta.forks.toLocaleString() },
+      { label: 'OPEN ISSUES',value: meta.open_issues.toLocaleString() },
+      { label: 'TOKENS USED',value: tokensUsed.toLocaleString() },
+    ];
+
+    grid.innerHTML = stats.map(s => `
+      <div class="meta-card">
+        <div class="meta-card-label">${s.label}</div>
+        <div class="meta-card-value">${s.value}</div>
+      </div>
+    `).join('');
+
+    const tagData = [
+      ...(meta.language ? [{ text: meta.language, cls: 'lang' }] : []),
+      ...(meta.license  ? [{ text: meta.license,   cls: '' }] : []),
+      ...(meta.has_ci   ? [{ text: 'CI/CD',         cls: 'ci' }] : []),
+      ...(meta.has_tests? [{ text: 'TESTS',          cls: 'test' }] : []),
+      ...(meta.topics || []).map(t => ({ text: t, cls: '' })),
+    ];
+
+    tags.innerHTML = tagData.map(t =>
+      `<span class="meta-tag ${t.cls}">${t.text.toUpperCase()}</span>`
+    ).join('');
+  }
+
+  // ── Handle generate ────────────────────────────────────────────
+  async function handleGenerate() {
+    const raw = document.getElementById('repo-url').value;
+    if (!raw.trim()) return;
+
+    const url = normalizeUrl(raw);
+    currentRepoUrl = url;
+
+    const badges = document.getElementById('include-badges').checked;
+    const toc    = document.getElementById('include-toc').checked;
+
+    document.getElementById('generate-btn').disabled = true;
+    startTime = Date.now();
+    setStatus('loading', 'Parsing repository…');
+
+    try {
+      const res = await fetch(`${API_BASE}/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          repo_url: url,
+          style: currentStyle,
+          include_badges: badges,
+          include_toc: toc,
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.detail || `HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+      currentReadme = data.readme_content;
+
+      // Render all panels
+      document.getElementById('md-render').innerHTML = marked.parse(data.readme_content);
+      document.getElementById('raw-output').value = data.readme_content;
+
+      document.getElementById('output-repo-name').textContent =
+        data.metadata.full_name + '.md';
+
+      renderMeta(data.metadata, data.tokens_used);
+
+      // Stats bar
+      document.getElementById('stat-tokens').textContent = ' ' + data.tokens_used.toLocaleString();
+      document.getElementById('stat-lines').textContent  = ' ' + data.readme_content.split('\n').length;
+      document.getElementById('stat-lang').textContent   = ' ' + (data.metadata.language || 'N/A');
+      document.getElementById('stat-time').textContent   = ' ' + elapsed + 's';
+      if (data.score !== undefined) {
+        document.getElementById('stat-score').textContent  = ' ' + data.score + '/100';
+      }
+
+      // Show output
+      document.getElementById('output-section').classList.add('visible');
+
+      setStatus('success', `README generated for ${data.metadata.full_name} in ${elapsed}s`);
+
+      // Scroll to output
+      setTimeout(() => {
+        document.getElementById('output-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+
+    } catch (err) {
+      setStatus('error', err.message || 'Generation failed. Check the URL and try again.');
+    } finally {
+      document.getElementById('generate-btn').disabled = false;
+    }
+  }
+
+  // ── Handle regenerate ──────────────────────────────────────────
+  async function handleRegenerate() {
+    const feedback = document.getElementById('feedback-input').value.trim();
+    if (!feedback || !currentReadme) return;
+
+    const badges = document.getElementById('include-badges').checked;
+    const toc    = document.getElementById('include-toc').checked;
+
+    startTime = Date.now();
+    setStatus('loading', 'Applying feedback…');
+
+    try {
+      const res = await fetch(`${API_BASE}/regenerate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          repo_url: currentRepoUrl,
+          current_readme: currentReadme,
+          feedback: feedback,
+          style: currentStyle,
+          include_badges: badges,
+          include_toc: toc,
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.detail || `HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+      currentReadme = data.readme_content;
+
+      document.getElementById('md-render').innerHTML = marked.parse(data.readme_content);
+      document.getElementById('raw-output').value = data.readme_content;
+      document.getElementById('stat-tokens').textContent = ' ' + data.tokens_used.toLocaleString();
+      document.getElementById('stat-lines').textContent  = ' ' + data.readme_content.split('\n').length;
+
+      // Switch to preview tab
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector('[data-tab="preview"]').classList.add('active');
+      document.getElementById('tab-preview').classList.add('active');
+
+      document.getElementById('feedback-input').value = '';
+
+      setStatus('success', `README revised in ${elapsed}s`);
+
+    } catch (err) {
+      setStatus('error', err.message || 'Regeneration failed.');
+    }
+  }
+
+  // ── Copy to clipboard ──────────────────────────────────────────
+  async function copyRaw() {
+    const text = document.getElementById('raw-output').value;
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = 'COPIED';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'COPY';
+        btn.classList.remove('copied');
+      }, 2000);
+    } catch (_) {}
+  }
+
+  // ── Download File ──────────────────────────────────────────────
+  function downloadRaw() {
+    if (!currentReadme) return;
+    const blob = new Blob([currentReadme], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const nameStr = document.getElementById('output-repo-name').textContent || 'README.md';
+    a.download = nameStr;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>

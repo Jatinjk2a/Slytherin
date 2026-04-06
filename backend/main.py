@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from collections import defaultdict
@@ -16,7 +16,10 @@ from models.schemas import (
 from services.github_parser import parse_repo
 from services.readme_generator import generate_readme
 from services.regenerator import regenerate_readme
+from services.scoring import score_repository
 from cache import metadata_cache, readme_cache, readme_cache_key
+from database import verify_db_connection, repositories_collection, readmes_collection, scores_collection
+from models.db_models import RepositoryDB, ReadmeDB, ScoreDB
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -74,6 +77,31 @@ async def add_process_time(request: Request, call_next):
     return response
 
 
+@app.on_event("startup")
+async def startup_db():
+    await verify_db_connection()
+
+
+async def save_to_db(repo_url: str, metadata, readme_content: str, score_data: dict):
+    if repositories_collection is None:
+        return
+        
+    try:
+        repo_db = RepositoryDB(repo_name=metadata.name, github_url=repo_url)
+        readme_db = ReadmeDB(repo_id=repo_db.id, content=readme_content)
+        score_db = ScoreDB(
+            repo_id=repo_db.id, 
+            score_breakdown=score_data["score_breakdown"],
+            total_score=score_data["total_score"]
+        )
+        
+        await repositories_collection.insert_one(repo_db.model_dump(by_alias=True))
+        await readmes_collection.insert_one(readme_db.model_dump(by_alias=True))
+        await scores_collection.insert_one(score_db.model_dump(by_alias=True))
+    except Exception as e:
+        logger.error(f"Failed to save to DB: {e}")
+
+
 # ── Exception handlers ─────────────────────────────────────────────────────────
 @app.exception_handler(ValueError)
 async def value_error_handler(request: Request, exc: ValueError):
@@ -115,7 +143,7 @@ async def health():
     tags=["README"],
     summary="Generate a README from a GitHub repo URL",
 )
-async def generate(req: GenerateRequest, request: Request):
+async def generate(req: GenerateRequest, request: Request, background_tasks: BackgroundTasks):
     """
     Full pipeline:
     1. Check README cache (skip GitHub + Claude if hit)
@@ -158,6 +186,15 @@ async def generate(req: GenerateRequest, request: Request):
             include_toc=req.include_toc,
             custom_sections=req.custom_sections,
         )
+        
+        # Calculate Score
+        score_data = score_repository(metadata)
+        result.score = score_data["total_score"]
+        result.score_breakdown = score_data["score_breakdown"]
+        
+        # Save payload back to DB
+        background_tasks.add_task(save_to_db, req.repo_url, metadata, result.readme_content, score_data)
+        
     except Exception as e:
         logger.exception("Claude generation failed")
         raise HTTPException(status_code=500, detail=f"README generation failed: {e}")
@@ -173,7 +210,7 @@ async def generate(req: GenerateRequest, request: Request):
     tags=["README"],
     summary="Revise an existing README based on feedback",
 )
-async def regenerate(req: RegenerateRequest, request: Request):
+async def regenerate(req: RegenerateRequest, request: Request, background_tasks: BackgroundTasks):
     """
     Takes your current README + natural-language feedback.
     Returns an improved version without re-parsing the repo.
@@ -205,6 +242,14 @@ async def regenerate(req: RegenerateRequest, request: Request):
             include_badges=req.include_badges,
             include_toc=req.include_toc,
         )
+        
+        # Calculate Score
+        score_data = score_repository(metadata)
+        result.score = score_data["total_score"]
+        result.score_breakdown = score_data["score_breakdown"]
+        
+        # Save payload back to DB
+        background_tasks.add_task(save_to_db, req.repo_url, metadata, result.readme_content, score_data)
     except Exception as e:
         logger.exception("Claude regeneration failed")
         raise HTTPException(status_code=500, detail=f"Regeneration failed: {e}")
