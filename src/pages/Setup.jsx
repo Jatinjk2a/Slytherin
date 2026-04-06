@@ -1,11 +1,18 @@
 import React, { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
+const TONES = [
+  { id: 'Technical', icon: 'code', description: 'Architecture, API refs & implementation details.' },
+  { id: 'Conversational', icon: 'chat_bubble', description: 'Friendly, approachable tone for open-source.' },
+  { id: 'Minimalist', icon: 'short_text', description: 'Concise and to the point — no fluff.' },
+]
+
 export default function Setup() {
   const navigate = useNavigate()
   const [tone, setTone] = useState('Technical')
   const [ignorePaths, setIgnorePaths] = useState(['node_modules/', '.env', 'build/'])
   const [newPath, setNewPath] = useState('')
+  const [saved, setSaved] = useState(false)
 
   const handleAddPath = () => {
     if (newPath.trim()) {
@@ -14,120 +21,187 @@ export default function Setup() {
     }
   }
   const handleRemovePath = (path) => setIgnorePaths(prev => prev.filter(p => p !== path))
-  const handleSave = () => alert('Configuration saved!')
+  const handleSave = () => {
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
   return (
     <>
-      
-
-<header className="fixed top-0 w-full z-50 bg-slate-50/60 dark:bg-slate-950/60 backdrop-blur-xl">
-<div className="flex justify-between items-center px-6 py-4 w-full">
-<div className="flex items-center gap-3">
-<div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-800 flex items-center justify-center text-white">
-<span className="material-symbols-outlined">terminal</span>
-</div>
-<h1 className="text-xl font-bold bg-gradient-to-br from-indigo-500 to-indigo-800 bg-clip-text text-transparent font-manrope tracking-tight">README AI</h1>
-</div>
-<div className="w-10 h-10 rounded-full overflow-hidden border-2 border-indigo-100">
-<img alt="User Profile" className="w-full h-full object-cover" data-alt="Close-up portrait of a professional developer in a soft-lit modern office environment, clean minimal photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlQ0B8ObtPl9QohOj90mYPQIl6f9AiQyHTQejDSlD5tgWymDTQUWJZ9LuUo1WnqJ7xZoGgFXHQ8MbQd2mGGRTEr7ee5ZPUmdHSfNZNJ3mtQGqawVG07lkg9Eu6DrKowv46_JKJKhbVSEI7kvNKAjOKjfsE1x94osqiLVLBuIFAqOr5B2obKCANcy0DL_2fSO3Y8VAsC3afk28bLk0cgG-PnIHiOdvE1PPFwTfhs7A5wBjfGFm57o5ZuRE7d-BSY9QqiXiZvWmCXQ_C"/>
-</div>
-</div>
-</header>
-<main className="mt-24 px-6 space-y-8 max-w-md mx-auto">
-
-<section>
-<h2 className="font-headline text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Repository Setup</h2>
-<p className="text-slate-500 font-body text-sm">Configure how AI interprets and documents your codebase.</p>
-</section>
-
-<section className="bg-slate-50 rounded-2xl p-6 shadow-sm">
-<div className="flex items-center gap-2 mb-4">
-<span className="material-symbols-outlined text-hazelnut">auto_awesome</span>
-<h3 className="font-headline font-bold text-slate-800">Documentation Tone</h3>
-</div>
-<div className="flex flex-wrap gap-3">
-
-<button onClick={() => setTone('Technical')} className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all shadow-md ${tone === 'Technical' ? 'bg-hazelnut text-white shadow-hazelnut/20' : 'bg-white border border-slate-200 text-slate-600 hover:border-hazelnut/50'}`}>
-<span className="material-symbols-outlined text-[18px]">code</span>
-                    Technical
-                </button>
-
-<button onClick={() => setTone('Conversational')} className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all ${tone === 'Conversational' ? 'bg-hazelnut text-white shadow-md shadow-hazelnut/20' : 'bg-white border border-slate-200 text-slate-600 hover:border-hazelnut/50'}`}>
-<span className="material-symbols-outlined text-[18px]">chat_bubble</span>
-                    Conversational
-                </button>
-
-<button onClick={() => setTone('Minimalist')} className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all ${tone === 'Minimalist' ? 'bg-hazelnut text-white shadow-md shadow-hazelnut/20' : 'bg-white border border-slate-200 text-slate-600 hover:border-hazelnut/50'}`}>
-<span className="material-symbols-outlined text-[18px]">short_text</span>
-                    Minimalist
-                </button>
-</div>
-<p className="mt-4 text-xs text-slate-400 font-body italic leading-relaxed">
-                Technical tone focuses on architecture, API references, and implementation details.
-            </p>
-</section>
-
-<section className="bg-slate-50 rounded-2xl p-6 shadow-sm">
-<div className="flex items-center gap-2 mb-4">
-<span className="material-symbols-outlined text-hazelnut">visibility_off</span>
-<h3 className="font-headline font-bold text-slate-800">Ignore Paths</h3>
-</div>
-<div className="relative mb-6">
-<input value={newPath} onChange={(e) => setNewPath(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleAddPath()} className="w-full bg-white border-none ring-1 ring-slate-200 focus:ring-2 focus:ring-hazelnut rounded-xl px-4 py-3 text-sm font-body text-slate-700 transition-all outline-none" placeholder="Add path (e.g. docs/*.md)" type="text"/>
-<button onClick={handleAddPath} className="absolute right-2 top-2 w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-hazelnut hover:text-white transition-colors">
-<span className="material-symbols-outlined">add</span>
-</button>
-</div>
-<div className="space-y-3">
-{ignorePaths.map((path) => (
-<div key={path} className="flex items-center justify-between p-3 bg-white rounded-xl ring-1 ring-slate-100">
-<div className="flex items-center gap-3">
-<span className="material-symbols-outlined text-slate-400 text-[20px]">folder</span>
-<code className="font-mono text-xs text-slate-600">{path}</code>
-</div>
-<button onClick={() => handleRemovePath(path)} className="text-slate-300 hover:text-red-400 transition-colors">
-<span className="material-symbols-outlined text-[18px]">close</span>
-</button>
-</div>
-))}
-</div>
-</section>
-
-<section className="pt-4 pb-10">
-<button onClick={handleSave} className="w-full hazelnut-gradient text-white font-headline font-bold py-4 rounded-2xl shadow-xl shadow-hazelnut/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
-<span className="material-symbols-outlined">save</span>
-                SAVE CONFIGURATION
+      {/* Header */}
+      <header className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200">
+        <div className="flex justify-between items-center px-6 py-4 w-full max-w-lg mx-auto">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate(-1)}
+              className="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors active:scale-95"
+            >
+              <span className="material-symbols-outlined text-slate-600 text-[20px]">arrow_back</span>
             </button>
-</section>
-</main>
+            <div>
+              <h1 className="text-base font-bold text-slate-900 font-headline tracking-tight leading-none">Repository Setup</h1>
+              <p className="text-[11px] text-slate-400 mt-0.5">Configure AI documentation</p>
+            </div>
+          </div>
+          <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-slate-200">
+            <img
+              alt="User"
+              className="w-full h-full object-cover"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlQ0B8ObtPl9QohOj90mYPQIl6f9AiQyHTQejDSlD5tgWymDTQUWJZ9LuUo1WnqJ7xZoGgFXHQ8MbQd2mGGRTEr7ee5ZPUmdHSfNZNJ3mtQGqawVG07lkg9Eu6DrKowv46_JKJKhbVSEI7kvNKAjOKjfsE1x94osqiLVLBuIFAqOr5B2obKCANcy0DL_2fSO3Y8VAsC3afk28bLk0cgG-PnIHiOdvE1PPFwTfhs7A5wBjfGFm57o5ZuRE7d-BSY9QqiXiZvWmCXQ_C"
+            />
+          </div>
+        </div>
+      </header>
 
-<nav className="fixed bottom-0 left-0 w-full bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-2xl rounded-t-[1.5rem] z-50 shadow-[0px_-10px_30px_rgba(0,0,0,0.05)]">
-<div className="flex justify-around items-center px-4 pb-6 pt-2">
+      {/* Main */}
+      <main className="min-h-screen bg-slate-50 pt-24 pb-36 px-6">
+        <div className="max-w-lg mx-auto space-y-5">
 
-<Link to="/dashboard" className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors">
-<span className="material-symbols-outlined">folder_open</span>
-<span className="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Projects</span>
-</Link>
+          {/* Documentation Tone Card */}
+          <section className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg bg-[#cfb095]/15 flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-[#a07850] text-[18px]">auto_awesome</span>
+              </div>
+              <div>
+                <h3 className="font-headline font-bold text-slate-900 text-sm">Documentation Tone</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Choose how AI writes your README</p>
+              </div>
+            </div>
 
-<Link to="/dashboard" className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors">
-<span className="material-symbols-outlined">auto_awesome</span>
-<span className="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Generate</span>
-</Link>
+            <div className="space-y-3">
+              {TONES.map(({ id, icon, description }) => {
+                const isSelected = tone === id
+                return (
+                  <button
+                    key={id}
+                    onClick={() => setTone(id)}
+                    className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-left transition-all duration-200 border ${
+                      isSelected
+                        ? 'bg-slate-800 border-slate-700 shadow-md'
+                        : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100'
+                    }`}
+                  >
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
+                      isSelected ? 'bg-white/15' : 'bg-white border border-slate-200'
+                    }`}>
+                      <span className={`material-symbols-outlined text-[18px] ${
+                        isSelected ? 'text-white' : 'text-slate-500'
+                      }`}>
+                        {icon}
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className={`font-bold text-sm ${isSelected ? 'text-white' : 'text-slate-800'}`}>{id}</p>
+                      <p className={`text-xs mt-0.5 ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>{description}</p>
+                    </div>
+                    {isSelected && (
+                      <span
+                        className="material-symbols-outlined text-white text-[20px] ml-auto shrink-0"
+                        style={{ fontVariationSettings: "'FILL' 1" }}
+                      >
+                        check_circle
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </section>
 
-<Link to="/history" className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors">
-<span className="material-symbols-outlined">history</span>
-<span className="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">History</span>
-</Link>
+          {/* Ignore Paths Card */}
+          <section className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-slate-500 text-[18px]">visibility_off</span>
+              </div>
+              <div>
+                <h3 className="font-headline font-bold text-slate-900 text-sm">Ignore Paths</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Files AI will skip during analysis</p>
+              </div>
+            </div>
 
-<Link to="/settings" className="flex flex-col items-center justify-center bg-indigo-100/50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-xl p-3 active:scale-90 transition-transform duration-300 ease-out">
-<span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>settings</span>
-<span className="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Settings</span>
-</Link>
-</div>
-</nav>
+            {/* Input */}
+            <div className="relative mb-4">
+              <input
+                value={newPath}
+                onChange={(e) => setNewPath(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAddPath()}
+                className="w-full bg-slate-50 border border-slate-200 focus:border-[#cfb095] focus:ring-2 focus:ring-[#cfb095]/20 rounded-xl px-4 py-3 pr-12 text-sm text-slate-800 placeholder:text-slate-400 transition-all outline-none font-mono"
+                placeholder="Add path (e.g. docs/*.md)"
+                type="text"
+              />
+              <button
+                onClick={handleAddPath}
+                className="absolute right-2 top-2 w-8 h-8 rounded-lg bg-slate-800 text-white flex items-center justify-center hover:bg-slate-700 transition-colors active:scale-95"
+              >
+                <span className="material-symbols-outlined text-[18px]">add</span>
+              </button>
+            </div>
 
-<div className="fixed top-0 right-0 -z-10 w-64 h-64 bg-hazelnut/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
-<div className="fixed bottom-0 left-0 -z-10 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl -ml-40 -mb-40"></div>
+            {/* Path list */}
+            <div className="space-y-2">
+              {ignorePaths.map((path) => (
+                <div key={path} className="flex items-center justify-between px-4 py-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-slate-400 text-[18px]">folder</span>
+                    <code className="font-mono text-xs text-slate-700">{path}</code>
+                  </div>
+                  <button
+                    onClick={() => handleRemovePath(path)}
+                    className="text-slate-300 hover:text-red-500 transition-colors active:scale-95"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">close</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
 
+          {/* Save Button */}
+          <section>
+            <button
+              onClick={handleSave}
+              className={`w-full py-4 rounded-2xl font-headline font-bold text-sm tracking-widest uppercase active:scale-[0.98] transition-all flex items-center justify-center gap-2 ${
+                saved
+                  ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/20'
+                  : 'bg-slate-800 text-white shadow-lg shadow-slate-800/20 hover:bg-slate-700'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                {saved ? 'check_circle' : 'save'}
+              </span>
+              {saved ? 'Configuration Saved!' : 'Save Configuration'}
+            </button>
+          </section>
+        </div>
+      </main>
+
+      {/* Bottom Nav */}
+      <nav className="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-2xl rounded-t-2xl z-50 border-t border-slate-200 shadow-[0px_-4px_20px_rgba(0,0,0,0.06)]">
+        <div className="flex justify-around items-center px-4 pb-6 pt-3 max-w-lg mx-auto">
+          <Link to="/dashboard" className="flex flex-col items-center justify-center text-slate-400 p-3 hover:text-slate-700 transition-colors">
+            <span className="material-symbols-outlined">folder_open</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest mt-1">Projects</span>
+          </Link>
+          <Link to="/dashboard" className="flex flex-col items-center justify-center text-slate-400 p-3 hover:text-slate-700 transition-colors">
+            <span className="material-symbols-outlined">auto_awesome</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest mt-1">Generate</span>
+          </Link>
+          <Link to="/history" className="flex flex-col items-center justify-center text-slate-400 p-3 hover:text-slate-700 transition-colors">
+            <span className="material-symbols-outlined">history</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest mt-1">History</span>
+          </Link>
+          <Link to="/settings" className="flex flex-col items-center justify-center bg-slate-100 text-slate-700 rounded-xl p-3">
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>settings</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest mt-1">Settings</span>
+          </Link>
+        </div>
+      </nav>
+
+      {/* Subtle background decorations */}
+      <div className="fixed top-0 right-0 -z-10 w-64 h-64 bg-[#cfb095]/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+      <div className="fixed bottom-0 left-0 -z-10 w-80 h-80 bg-slate-200/50 rounded-full blur-3xl -ml-40 -mb-40 pointer-events-none"></div>
     </>
   )
 }
