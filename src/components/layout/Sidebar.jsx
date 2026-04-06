@@ -1,8 +1,16 @@
 import React from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { useApp } from "@/context/AppProvider"
 
 export default function Sidebar() {
   const navigate = useNavigate()
+  const { user, logout } = useApp()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login', { replace: true })
+  }
+
   return (
     <aside className="hidden md:flex fixed left-0 top-0 h-full flex-col p-4 z-50 bg-white w-64 border-r border-[#f4ebe1] font-['Manrope'] tracking-tight transition-all duration-200">
       <div className="mb-10 px-4">
@@ -17,33 +25,45 @@ export default function Sidebar() {
       </div>
       <nav className="flex-1 px-3 space-y-1">
         <Link className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200" to="/dashboard">
-          <span className="material-symbols-outlined" data-icon="home">home</span>
+          <span className="material-symbols-outlined">home</span>
           <span className="text-sm font-medium">Dashboard</span>
         </Link>
         <Link className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200" to="/history">
-          <span className="material-symbols-outlined" data-icon="history">history</span>
+          <span className="material-symbols-outlined">history</span>
           <span className="text-sm font-medium">History</span>
         </Link>
         <Link className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200" to="/settings">
-          <span className="material-symbols-outlined" data-icon="settings">settings</span>
+          <span className="material-symbols-outlined">settings</span>
           <span className="text-sm font-medium">Settings</span>
         </Link>
         <Link className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200" to="/curator">
-          <span className="material-symbols-outlined" data-icon="analytics">analytics</span>
+          <span className="material-symbols-outlined">analytics</span>
           <span className="text-sm font-medium">Curator</span>
         </Link>
       </nav>
-      <div className="p-6 mt-auto border-t border-slate-100">
+      <div className="p-4 mt-auto border-t border-slate-100 space-y-2">
         <Link className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container-low transition-colors" to="/profile">
-          <div className="w-10 h-10 rounded-full border border-outline-variant/30 overflow-hidden">
-            <img alt="DevUser_01" className="w-full h-full object-cover" data-alt="A futuristic geometric avatar focusing on the theme of technology" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3K5NqDwndLs2yZwfO-2tcJkdZFhxA84EYaCBQJk-P1cu-3-Ttvcjf1pO9tAxhiINTmKc6evSfP0Z8lDZPQRzYQq4bX9rAhSuRkOlxdHh50KP5nE5YDQoqfuwquAfvVhQmhprcuJB5IYyCy3ucYyt6YufezPdrif0dtrNZmlzpZR0t2AhfnmTWX-kxALbS4MST3m-FQRBhAfQnXzGhOFpuDW7tjdQ9b5Rrco1Dz80aRDtoR9JoLEOzB3ZUdy_0-Kwu_R5LEpIGmSjK"/>
+          <div className="w-10 h-10 rounded-full border border-outline-variant/30 overflow-hidden shrink-0">
+            <img
+              alt={user?.name || 'User'}
+              className="w-full h-full object-cover"
+              src={user?.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuC3K5NqDwndLs2yZwfO-2tcJkdZFhxA84EYaCBQJk-P1cu-3-Ttvcjf1pO9tAxhiINTmKc6evSfP0Z8lDZPQRzYQq4bX9rAhSuRkOlxdHh50KP5nE5YDQoqfuwquAfvVhQmhprcuJB5IYyCy3ucYyt6YufezPdrif0dtrNZmlzpZR0t2AhfnmTWX-kxALbS4MST3m-FQRBhAfQnXzGhOFpuDW7tjdQ9b5Rrco1Dz80aRDtoR9JoLEOzB3ZUdy_0-Kwu_R5LEpIGmSjK'}
+            />
           </div>
-          <div>
-            <div className="text-sm font-bold text-on-surface">Alex Rivera</div>
-            <div className="text-xs text-on-surface-variant font-medium">Pro Curator</div>
+          <div className="min-w-0">
+            <div className="text-sm font-bold text-on-surface truncate">{user?.name || 'User'}</div>
+            <div className="text-xs text-on-surface-variant font-medium truncate">{user?.role || 'Curator'}</div>
           </div>
         </Link>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors text-sm font-medium"
+        >
+          <span className="material-symbols-outlined text-[20px]">logout</span>
+          Sign Out
+        </button>
       </div>
     </aside>
   )
 }
+
