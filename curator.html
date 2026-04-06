@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>README AI - Curator Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Inter:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "background": "#faf8ff",
+                    "surface-container-low": "#f2f3ff",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#9c48ea",
+                    "tertiary": "#8127cf",
+                    "primary-fixed-dim": "#bdc2ff",
+                    "on-primary-container": "#fffbff",
+                    "primary": "#4651b9",
+                    "outline-variant": "#c7c4d7",
+                    "on-primary-fixed-variant": "#2f3aa3",
+                    "surface-tint": "#4953bc",
+                    "surface-container": "#eaedff",
+                    "surface-variant": "#dae2fd",
+                    "tertiary-fixed": "#f0dbff",
+                    "on-tertiary-fixed-variant": "#6900b3",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#39b8fd",
+                    "secondary": "#006591",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e2e7ff",
+                    "secondary-fixed": "#c9e6ff",
+                    "on-background": "#131b2e",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#d2d9f4",
+                    "surface": "#faf8ff",
+                    "tertiary-fixed-dim": "#ddb7ff",
+                    "on-secondary-container": "#004666",
+                    "on-primary-fixed": "#000767",
+                    "inverse-surface": "#283044",
+                    "on-surface-variant": "#464554",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "outline": "#767586",
+                    "inverse-on-surface": "#eef0ff",
+                    "on-tertiary-container": "#fffbff",
+                    "on-secondary-fixed": "#001e2f",
+                    "on-surface": "#131b2e",
+                    "surface-container-highest": "#dae2fd",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#89ceff",
+                    "on-tertiary-fixed": "#2c0051",
+                    "inverse-primary": "#bdc2ff",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#e0e0ff",
+                    "surface-bright": "#faf8ff",
+                    "primary-container": "#606ad4",
+                    "hazelnut": "#cfb095"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="text-on-background">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 border-r border-zinc-200/10 bg-zinc-50 dark:bg-zinc-950 py-6 px-4 font-manrope font-medium text-sm">
+<div class="mb-10 px-2">
+<h1 class="text-lg font-black text-zinc-900 dark:text-zinc-50">Logic Curator</h1>
+<p class="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">AI Documentation</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 transition-all duration-300 rounded-xl group" href="#">
+<span class="material-symbols-outlined">home</span>
+                Home
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-indigo-600 dark:text-indigo-400 font-bold border-r-2 border-indigo-600 dark:border-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/10 transition-transform translate-x-1 rounded-xl group" href="#">
+<span class="material-symbols-outlined">history</span>
+                History
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 transition-all duration-300 rounded-xl group" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 transition-all duration-300 rounded-xl group" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+                Upgrade
+            </a>
+</nav>
+<div class="mt-auto">
+<button class="w-full py-3 bg-hazelnut text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                New Project
+            </button>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl border-b border-zinc-200/10 md:pl-72">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold tracking-tighter text-zinc-900 dark:text-zinc-50 font-manrope">Luminescent Logic</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden sm:flex items-center gap-6 text-sm font-manrope">
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-indigo-500 transition-colors" href="#">Documentation</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-indigo-500 transition-colors" href="#">Community</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-zinc-500 hover:text-indigo-600 transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-2 text-zinc-500 hover:text-indigo-600 transition-colors"><span class="material-symbols-outlined">help</span></button>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-zinc-200 ml-2">
+<img alt="User profile" data-alt="professional headshot of a software developer with a friendly expression in a modern office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-as2lAeANVWRtl5S03cq0fZXzw6Zz2eY4_dp5-wvZgyWPs3-fpygbIJVNZQvs_xo2KBSCYa1iqvm_th2EjCFT2k7Nfyi2-Eh5aGw7qS_LYoA1LC-Bl-2uLW-dKvmmR4vxd07XAD7fQAvrt2OVVcsOkb5GlvqYoo8awLFhgJ-k3VuG-47HKD7lmL8Y0I6B2o0QBx6AomWUn8DQ_ESBQSZKwvYIjeysTftkSyOgU2T0hSBjwWNqKAYjPPThc_NzIYqLohXz07ARMQ7V"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pb-12 md:pl-72 px-8 min-h-screen bg-white">
+<div class="max-w-6xl mx-auto">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div class="space-y-2">
+<div class="inline-flex items-center gap-2 text-hazelnut font-semibold text-sm tracking-wider uppercase">
+<span class="material-symbols-outlined text-sm">analytics</span>
+                        Curator Analysis
+                    </div>
+<h1 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-zinc-900">README Analysis: Lucid Flow Engine</h1>
+<p class="text-zinc-500 text-lg">Detailed audit of documentation health for <span class="font-mono text-sm bg-zinc-100 px-2 py-0.5 rounded">v2.4.0-stable</span></p>
+</div>
+<button class="px-8 py-4 bg-hazelnut text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:opacity-95 transition-all shadow-lg shadow-hazelnut/20 active:scale-95 text-lg">
+<span class="material-symbols-outlined">refresh</span>
+                    Regenerate README
+                </button>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Score & Details -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Curator Score Card -->
+<div class="bg-surface-container-low rounded-2xl p-10 flex flex-col md:flex-row items-center gap-12 border border-white/40">
+<div class="relative w-48 h-48 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90">
+<circle cx="96" cy="96" fill="transparent" r="88" stroke="#f2f3ff" stroke-width="12"></circle>
+<circle cx="96" cy="96" fill="transparent" r="88" stroke="#cfb095" stroke-dasharray="552.92" stroke-dashoffset="44.23" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-5xl font-black text-zinc-900">92%</span>
+<span class="text-xs font-bold text-hazelnut uppercase tracking-widest mt-1">Excellent</span>
+</div>
+</div>
+<div class="flex-1 space-y-4 text-center md:text-left">
+<h2 class="text-3xl font-bold text-zinc-900 tracking-tight">Curator Score</h2>
+<p class="text-zinc-600 leading-relaxed max-w-md">Your documentation is performing exceptionally well. Minor refinements in licensing and contributor guidelines could push this to a perfect score.</p>
+<div class="flex flex-wrap gap-2 justify-center md:justify-start pt-2">
+<span class="px-4 py-1.5 bg-white rounded-full text-xs font-bold text-zinc-500 border border-zinc-100">Performance: 98%</span>
+<span class="px-4 py-1.5 bg-white rounded-full text-xs font-bold text-zinc-500 border border-zinc-100">Legibility: 89%</span>
+<span class="px-4 py-1.5 bg-white rounded-full text-xs font-bold text-zinc-500 border border-zinc-100">Setup: 100%</span>
+</div>
+</div>
+</div>
+<!-- Detailed Review Section -->
+<div class="grid md:grid-cols-2 gap-6">
+<!-- Strengths -->
+<div class="bg-surface-container-lowest rounded-2xl p-8 border border-zinc-100">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h3 class="text-xl font-bold text-zinc-900">Strengths</h3>
+</div>
+<ul class="space-y-4">
+<li class="flex items-start gap-3 group">
+<span class="material-symbols-outlined text-emerald-500 mt-0.5 group-hover:scale-110 transition-transform">check</span>
+<span class="text-zinc-600">Comprehensive Installation Guide</span>
+</li>
+<li class="flex items-start gap-3 group">
+<span class="material-symbols-outlined text-emerald-500 mt-0.5 group-hover:scale-110 transition-transform">check</span>
+<span class="text-zinc-600">Clear Feature List &amp; Value Prop</span>
+</li>
+<li class="flex items-start gap-3 group">
+<span class="material-symbols-outlined text-emerald-500 mt-0.5 group-hover:scale-110 transition-transform">check</span>
+<span class="text-zinc-600">High-quality Visual Diagrams</span>
+</li>
+<li class="flex items-start gap-3 group">
+<span class="material-symbols-outlined text-emerald-500 mt-0.5 group-hover:scale-110 transition-transform">check</span>
+<span class="text-zinc-600">Standardized Heading Hierarchy</span>
+</li>
+</ul>
+</div>
+<!-- Weaknesses -->
+<div class="bg-surface-container-lowest rounded-2xl p-8 border border-zinc-100">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<h3 class="text-xl font-bold text-zinc-900">Weaknesses</h3>
+</div>
+<ul class="space-y-4">
+<li class="flex items-start gap-3 group">
+<span class="material-symbols-outlined text-amber-500 mt-0.5 group-hover:scale-110 transition-transform">error</span>
+<span class="text-zinc-600">Missing License Information</span>
+</li>
+<li class="flex items-start gap-3 group">
+<span class="material-symbols-outlined text-amber-500 mt-0.5 group-hover:scale-110 transition-transform">error</span>
+<span class="text-zinc-600">Contribution Guidelines are vague</span>
+</li>
+<li class="flex items-start gap-3 group">
+<span class="material-symbols-outlined text-amber-500 mt-0.5 group-hover:scale-110 transition-transform">error</span>
+<span class="text-zinc-600">Broken links in API Reference</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- AI Suggested Fixes -->
+<div class="bg-zinc-900 rounded-2xl p-8 text-white">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">magic_button</span>
+</div>
+<div>
+<h3 class="text-xl font-bold">AI Suggested Fixes</h3>
+<p class="text-zinc-400 text-sm">Select changes to apply automatically</p>
+</div>
+</div>
+<button class="text-hazelnut font-bold text-sm hover:underline">Apply All Selected</button>
+</div>
+<div class="space-y-4">
+<label class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
+<div class="flex items-center gap-4">
+<input checked="" class="w-5 h-5 rounded border-white/20 bg-transparent text-hazelnut focus:ring-hazelnut" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-semibold">Auto-generate MIT License file</span>
+<span class="text-xs text-zinc-500 italic">Adds LICENSE.md to root directory</span>
+</div>
+</div>
+<span class="px-3 py-1 bg-hazelnut/20 text-hazelnut rounded-full text-[10px] font-bold uppercase tracking-wider">+4% Score</span>
+</label>
+<label class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
+<div class="flex items-center gap-4">
+<input class="w-5 h-5 rounded border-white/20 bg-transparent text-hazelnut focus:ring-hazelnut" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-semibold">Expand Contributing Guide</span>
+<span class="text-xs text-zinc-500 italic">Adds PR templates and code style rules</span>
+</div>
+</div>
+<span class="px-3 py-1 bg-hazelnut/20 text-hazelnut rounded-full text-[10px] font-bold uppercase tracking-wider">+3% Score</span>
+</label>
+<label class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
+<div class="flex items-center gap-4">
+<input checked="" class="w-5 h-5 rounded border-white/20 bg-transparent text-hazelnut focus:ring-hazelnut" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-semibold">Fix API Table Formatting</span>
+<span class="text-xs text-zinc-500 italic">Standardizes column widths for readability</span>
+</div>
+</div>
+<span class="px-3 py-1 bg-hazelnut/20 text-hazelnut rounded-full text-[10px] font-bold uppercase tracking-wider">+1% Score</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Right Column: History -->
+<div class="lg:col-span-4 space-y-8">
+<div class="bg-zinc-50 rounded-2xl p-8 border border-zinc-100">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-zinc-400">history</span>
+<h3 class="text-xl font-bold text-zinc-900 tracking-tight">Iteration History</h3>
+</div>
+<div class="relative space-y-8 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-zinc-200">
+<!-- Current -->
+<div class="relative pl-8 group">
+<div class="absolute left-0 top-1.5 w-[24px] h-[24px] rounded-full bg-hazelnut border-4 border-white z-10"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-hazelnut uppercase tracking-widest">Active</span>
+<div class="flex justify-between items-end mt-1">
+<span class="font-bold text-zinc-900">Current Audit</span>
+<span class="text-2xl font-black text-zinc-900">92%</span>
+</div>
+<span class="text-[10px] text-zinc-400 font-mono mt-1">OCT 24, 2023 • 14:32</span>
+</div>
+</div>
+<!-- Previous -->
+<div class="relative pl-8 group cursor-pointer">
+<div class="absolute left-0 top-1.5 w-[24px] h-[24px] rounded-full bg-zinc-300 border-4 border-white group-hover:bg-zinc-400 transition-colors z-10"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-zinc-400 uppercase tracking-widest group-hover:text-zinc-600">Draft v4</span>
+<div class="flex justify-between items-end mt-1">
+<span class="font-medium text-zinc-500 group-hover:text-zinc-900 transition-colors">Initial Repo Import</span>
+<span class="text-xl font-bold text-zinc-400 group-hover:text-zinc-900 transition-colors">64%</span>
+</div>
+<span class="text-[10px] text-zinc-400 font-mono mt-1">OCT 22, 2023 • 09:15</span>
+</div>
+</div>
+<!-- Previous -->
+<div class="relative pl-8 group cursor-pointer opacity-60">
+<div class="absolute left-0 top-1.5 w-[24px] h-[24px] rounded-full bg-zinc-200 border-4 border-white z-10"></div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Legacy</span>
+<div class="flex justify-between items-end mt-1">
+<span class="font-medium text-zinc-500">External Import</span>
+<span class="text-xl font-bold text-zinc-300">42%</span>
+</div>
+<span class="text-[10px] text-zinc-400 font-mono mt-1">SEP 15, 2023 • 18:44</span>
+</div>
+</div>
+</div>
+<div class="mt-12 p-6 bg-hazelnut/5 rounded-2xl border border-hazelnut/10">
+<h4 class="text-sm font-bold text-hazelnut mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                Growth Insight
+                            </h4>
+<p class="text-xs text-zinc-600 leading-relaxed">Your documentation quality has improved by <strong class="text-zinc-900">43%</strong> since the initial import. Keep adding detailed usage examples to reach top tier.</p>
+</div>
+</div>
+<!-- Meta Info Card -->
+<div class="bg-surface-container-high/50 rounded-2xl p-6 overflow-hidden relative">
+<div class="relative z-10">
+<h3 class="font-bold text-zinc-900 mb-4">Repository Health</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-sm">
+<span class="text-zinc-500">Open Issues</span>
+<span class="font-mono font-bold">12</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-zinc-500">PR Documentation</span>
+<span class="text-emerald-600 font-bold flex items-center gap-1">
+                                        Active <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-zinc-500">Last Scanned</span>
+<span class="text-zinc-900">2 mins ago</span>
+</div>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-9xl">hub</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Overlay for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-zinc-100 flex items-center justify-around z-50">
+<a class="flex flex-col items-center justify-center text-zinc-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-hazelnut" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="text-[10px] font-bold">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">Settings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="text-[10px] font-bold">Upgrade</span>
+</a>
+</nav>
+</body></html>

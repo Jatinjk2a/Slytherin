@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>README AI - Code Explain</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Fira+Code&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-tertiary": "#ffffff",
+                "on-primary-fixed-variant": "#2f3aa3",
+                "inverse-surface": "#283044",
+                "surface-bright": "#faf8ff",
+                "surface": "#ffffff", /* Override for White & Hazelnut */
+                "secondary-fixed": "#c9e6ff",
+                "on-error": "#ffffff",
+                "on-primary-fixed": "#000767",
+                "surface-container-high": "#fdfbf9", 
+                "on-primary-container": "#fffbff",
+                "outline": "#767586",
+                "tertiary-fixed-dim": "#ddb7ff",
+                "surface-variant": "#f4f1ee",
+                "tertiary-container": "#9c48ea",
+                "secondary-fixed-dim": "#89ceff",
+                "inverse-on-surface": "#eef0ff",
+                "on-surface-variant": "#464554",
+                "on-secondary-fixed": "#001e2f",
+                "tertiary-fixed": "#f0dbff",
+                "outline-variant": "#cfb095", /* Hazelnut */
+                "surface-dim": "#d2d9f4",
+                "tertiary": "#8127cf",
+                "background": "#ffffff",
+                "secondary": "#cfb095", /* Hazelnut */
+                "on-error-container": "#93000a",
+                "primary-fixed": "#e0e0ff",
+                "on-secondary-container": "#4a3a2a",
+                "surface-container-highest": "#f8f5f2",
+                "surface-container-lowest": "#ffffff",
+                "primary-container": "#cfb095", /* Hazelnut */
+                "error-container": "#ffdad6",
+                "on-tertiary-fixed-variant": "#6900b3",
+                "on-surface": "#1a1a1a",
+                "error": "#ba1a1a",
+                "on-secondary-fixed-variant": "#004c6e",
+                "primary": "#cfb095", /* Hazelnut */
+                "surface-container-low": "#fafafa",
+                "surface-tint": "#cfb095",
+                "on-secondary": "#ffffff",
+                "on-tertiary-fixed": "#2c0051",
+                "secondary-container": "#f4ede6",
+                "surface-container": "#ffffff",
+                "on-primary": "#ffffff",
+                "on-background": "#1a1a1a",
+                "primary-fixed-dim": "#bdc2ff",
+                "on-tertiary-container": "#fffbff",
+                "inverse-primary": "#bdc2ff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "2xl": "1rem",
+                "3xl": "1.5rem",
+                "full": "9999px"
+            },
+            "fontFamily": {
+                "headline": ["Manrope", "sans-serif"],
+                "body": ["Inter", "sans-serif"],
+                "label": ["Inter", "sans-serif"],
+                "mono": ["Fira Code", "monospace"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .syntax-keyword { color: #c678dd; }
+        .syntax-function { color: #61afef; }
+        .syntax-string { color: #98c379; }
+        .syntax-comment { color: #5c6370; font-style: italic; }
+        .syntax-const { color: #d19a66; }
+        .syntax-operator { color: #56b6c2; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center px-4 h-16 bg-white dark:bg-zinc-950 rounded-b-2xl">
+<div class="flex items-center w-full justify-between">
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400">arrow_back</span>
+</button>
+<h1 class="font-['Manrope'] font-bold text-lg tracking-tight text-zinc-900 dark:text-zinc-100">File: App.jsx</h1>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+<span class="material-symbols-outlined text-zinc-500">more_vert</span>
+</button>
+</div>
+</header>
+<main class="pt-20 pb-32 px-5 max-w-2xl mx-auto space-y-8">
+<!-- Code Preview Block -->
+<section class="relative">
+<div class="flex items-center justify-between mb-3 px-1">
+<span class="text-xs font-mono text-zinc-400 uppercase tracking-widest">Source Code</span>
+<span class="flex items-center gap-1.5 text-xs font-medium text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Javascript
+                </span>
+</div>
+<div class="bg-zinc-900 rounded-3xl p-6 shadow-2xl overflow-hidden font-mono text-sm leading-relaxed border border-zinc-800">
+<div class="flex gap-2 mb-4">
+<div class="w-3 h-3 rounded-full bg-zinc-700"></div>
+<div class="w-3 h-3 rounded-full bg-zinc-700"></div>
+<div class="w-3 h-3 rounded-full bg-zinc-700"></div>
+</div>
+<pre class="text-zinc-300 overflow-x-auto"><span class="syntax-keyword">import</span> React, { useState, useEffect } <span class="syntax-keyword">from</span> <span class="syntax-string">'react'</span>;
+
+<span class="syntax-keyword">const</span> <span class="syntax-function">UserProfile</span> = ({ userId }) =&gt; {
+  <span class="syntax-keyword">const</span> [user, setUser] = <span class="syntax-function">useState</span>(<span class="syntax-keyword">null</span>);
+  <span class="syntax-keyword">const</span> [loading, setLoading] = <span class="syntax-function">useState</span>(<span class="syntax-keyword">true</span>);
+
+  <span class="syntax-function">useEffect</span>(() =&gt; {
+    <span class="syntax-keyword">const</span> <span class="syntax-function">fetchData</span> = <span class="syntax-keyword">async</span> () =&gt; {
+      <span class="syntax-keyword">try</span> {
+        <span class="syntax-keyword">const</span> res = <span class="syntax-keyword">await</span> <span class="syntax-function">fetch</span>(<span class="syntax-string">`/api/v1/users/</span>${userId}<span class="syntax-string">`</span>);
+        <span class="syntax-keyword">const</span> data = <span class="syntax-keyword">await</span> res.<span class="syntax-function">json</span>();
+        <span class="syntax-function">setUser</span>(data);
+      } <span class="syntax-keyword">catch</span> (err) {
+        console.<span class="syntax-function">error</span>(<span class="syntax-string">'Fetch failed'</span>, err);
+      } <span class="syntax-keyword">finally</span> {
+        <span class="syntax-function">setLoading</span>(<span class="syntax-keyword">false</span>);
+      }
+    };
+    <span class="syntax-function">fetchData</span>();
+  }, [userId]);
+
+  <span class="syntax-keyword">return</span> loading ? <span class="syntax-operator">&lt;</span><span class="syntax-function">Loader</span> <span class="syntax-operator">/&gt;</span> : <span class="syntax-operator">&lt;</span><span class="syntax-function">Profile</span> user={user} <span class="syntax-operator">/&gt;</span>;
+};</pre>
+</div>
+</section>
+<!-- AI Insights Card -->
+<section class="relative">
+<div class="bg-white rounded-3xl p-8 border border-outline-variant/30 shadow-[0px_10px_30px_rgba(207,176,149,0.1)] relative overflow-hidden">
+<!-- Abstract Glow -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-secondary/5 blur-[60px] rounded-full"></div>
+<div class="flex flex-col gap-6 relative z-10">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-2xl bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h2 class="font-headline font-extrabold text-xl text-on-surface tracking-tight">AI Insights</h2>
+<p class="text-xs text-secondary font-semibold uppercase tracking-widest">Code Analysis</p>
+</div>
+</div>
+<div class="space-y-4">
+<p class="text-on-surface leading-relaxed text-lg font-medium opacity-90">
+                            This component implements an asynchronous data fetching pattern for user profiles.
+                        </p>
+<div class="grid grid-cols-1 gap-4">
+<div class="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/10">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-secondary text-xl">psychology</span>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                                        It utilizes the <code class="bg-secondary/10 px-1 rounded text-secondary font-mono">useEffect</code> hook to trigger a network request whenever the <code class="bg-secondary/10 px-1 rounded text-secondary font-mono">userId</code> prop changes.
+                                    </p>
+</div>
+</div>
+<div class="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/10">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-secondary text-xl">verified</span>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                                        Includes structured <code class="bg-secondary/10 px-1 rounded text-secondary font-mono">try-catch-finally</code> blocks to manage loading states and error handling gracefully.
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 flex items-center justify-between border-t border-outline-variant/10">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="portrait of a young software engineer smiling with glasses professional lighting neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO6EcWP1MXC5849-lcUciygKemhYJVN4mxQvtOLpofWFccc7zQ1wvLbUrZL7PGPhf3Jgc5OlG12kNmfKz0rlqv-gpcN-WZk_1Q3SCoEZq9TVL4LL6-43MLF2ylem2fazFmgwwl9nLaeEQYrSAOhja0tOk5VFHjwSuywbhyC7yS4e4XhtqQiQ8mjd7A-zfciRpWbszWHgKyztrOwLmDLOdqzM_yYfaUplp0FC84K5T6YieDI6yG8LZYcOHyt63MBtmZlsaLhGxKsngh"/>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-secondary flex items-center justify-center text-[10px] font-bold text-white uppercase">AI</div>
+</div>
+<button class="text-sm font-bold text-secondary flex items-center gap-1 hover:opacity-80 transition-opacity">
+                            View Docs
+                            <span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Contextual Recommendation Card -->
+<section class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-highest p-5 rounded-3xl flex flex-col justify-between aspect-square">
+<span class="material-symbols-outlined text-secondary text-2xl">history</span>
+<div>
+<h3 class="font-headline font-bold text-sm">Review History</h3>
+<p class="text-[10px] text-on-surface-variant mt-1">3 changes today</p>
+</div>
+</div>
+<div class="bg-secondary-container p-5 rounded-3xl flex flex-col justify-between aspect-square">
+<span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<div>
+<h3 class="font-headline font-bold text-sm">Run Tests</h3>
+<p class="text-[10px] text-on-secondary-fixed-variant mt-1">Ready to deploy</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-6 pt-2 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl rounded-t-[1.5rem] border-t border-zinc-200/15 dark:border-zinc-800/15 shadow-[0px_-20px_40px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-xl p-3 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">code</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">Explain</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">Terminal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

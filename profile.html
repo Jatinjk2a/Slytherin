@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Luminescent Logic - User Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#ddb7ff",
+                    "background": "#faf8ff",
+                    "inverse-primary": "#bdc2ff",
+                    "on-primary-container": "#fffbff",
+                    "surface-container": "#eaedff",
+                    "outline": "#767586",
+                    "surface-container-highest": "#dae2fd",
+                    "surface-bright": "#faf8ff",
+                    "inverse-on-surface": "#eef0ff",
+                    "secondary-fixed": "#c9e6ff",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f2f3ff",
+                    "on-surface": "#131b2e",
+                    "primary-fixed-dim": "#bdc2ff",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#89ceff",
+                    "surface-container-high": "#e2e7ff",
+                    "secondary": "#006591",
+                    "primary": "#4651b9",
+                    "tertiary-fixed": "#f0dbff",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#9c48ea",
+                    "on-tertiary-fixed": "#2c0051",
+                    "on-error": "#ffffff",
+                    "on-secondary-container": "#004666",
+                    "on-tertiary-fixed-variant": "#6900b3",
+                    "on-primary-fixed-variant": "#2f3aa3",
+                    "inverse-surface": "#283044",
+                    "on-surface-variant": "#464554",
+                    "surface-tint": "#4953bc",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#004c6e",
+                    "outline-variant": "#c7c4d7",
+                    "secondary-container": "#39b8fd",
+                    "surface-variant": "#dae2fd",
+                    "primary-fixed": "#e0e0ff",
+                    "on-secondary-fixed": "#001e2f",
+                    "on-primary-fixed": "#000767",
+                    "on-background": "#131b2e",
+                    "surface": "#faf8ff",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#606ad4",
+                    "surface-dim": "#d2d9f4",
+                    "tertiary": "#8127cf",
+                    "on-tertiary-container": "#fffbff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#faf8ff] text-on-surface pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white dark:bg-zinc-950">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#cfb095]" data-icon="terminal">terminal</span>
+<h1 class="text-lg font-bold text-zinc-900 dark:text-zinc-50 font-manrope tracking-tight font-semibold">Luminescent Logic</h1>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img alt="Alex Rivera Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional man with a kind smile, neutral studio background, soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3K5NqDwndLs2yZwfO-2tcJkdZFhxA84EYaCBQJk-P1cu-3-Ttvcjf1pO9tAxhiINTmKc6evSfP0Z8lDZPQRzYQq4bX9rAhSuRkOlxdHh50KP5nE5YDQoqfuwquAfvVhQmhprcuJB5IYyCy3ucYyt6YufezPdrif0dtrNZmlzpZR0t2AhfnmTWX-kxALbS4MST3m-FQRBhAfQnXzGhOFpuDW7tjdQ9b5Rrco1Dz80aRDtoR9JoLEOzB3ZUdy_0-Kwu_R5LEpIGmSjK"/>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-md mx-auto space-y-8">
+<!-- Profile Section -->
+<section class="flex flex-col items-center text-center space-y-4">
+<div class="relative">
+<div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-[#cfb095] to-secondary-container">
+<img alt="Alex Rivera" class="w-full h-full object-cover rounded-full border-4 border-white" data-alt="Professional portrait of a man in his 30s, creative director style, bright clean background, high resolution" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhxFtxj9Pt1kFB5Sgpl-7YA5H_8H1DHcgCF-oBkfSd-6qydzccI5ZdWwVHhBllkNG0DAwd82QMJHUESfrbU8-oI80lwuYMMT1cfY7Wj1vpAHy55wcbFoe4mnkv0m8Eq7dpNTQ3YkuGhAKa9ZTx-jzuQGEQdcf6cOB4phvo08v2mmt1NXSPhSrQdUq5gFt2E-Ax4Fppf6QU6sVVfbkQcCvaYcyTC-0h61fCD-2EqJ7aL253wwiUf4bIQbFvmufBVCDES9OfiJVTX8Ct"/>
+</div>
+<div class="absolute bottom-0 right-0 bg-[#cfb095] text-white p-1.5 rounded-full border-2 border-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div>
+<h2 class="text-2xl font-extrabold tracking-tight text-on-surface">Alex Rivera</h2>
+<p class="text-zinc-500 font-medium">Pro Curator</p>
+</div>
+<button class="bg-[#cfb095] text-white px-8 py-3 rounded-2xl font-bold tracking-wide flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-[#cfb095]/20">
+                EDIT PROFILE
+            </button>
+</section>
+<!-- Stats Section (Bento Style) -->
+<section class="space-y-4">
+<h3 class="text-sm font-bold uppercase tracking-widest text-zinc-400 px-1">Developer Stats</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-5 rounded-2xl flex flex-col justify-between h-32 border border-outline-variant/10">
+<span class="material-symbols-outlined text-[#cfb095]" data-icon="inventory_2">inventory_2</span>
+<div>
+<div class="text-2xl font-black text-on-surface">42</div>
+<div class="text-xs font-semibold text-zinc-500 uppercase tracking-tighter">Repos Curated</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 rounded-2xl flex flex-col justify-between h-32 border border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<div>
+<div class="text-2xl font-black text-on-surface">96%</div>
+<div class="text-xs font-semibold text-zinc-500 uppercase tracking-tighter">Avg Score</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Subscription Widget -->
+<section class="bg-on-surface text-white p-6 rounded-2xl relative overflow-hidden">
+<div class="absolute top-[-20%] right-[-10%] w-32 h-32 bg-[#cfb095]/20 rounded-full blur-3xl"></div>
+<div class="relative z-10 flex justify-between items-center">
+<div>
+<p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-1">Subscription Details</p>
+<h4 class="text-lg font-bold text-[#cfb095]">Active Plan: Pro</h4>
+</div>
+<div class="bg-white/10 p-2 rounded-xl backdrop-blur-md">
+<span class="material-symbols-outlined text-[#cfb095]" data-icon="workspace_premium">workspace_premium</span>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
+<span class="text-xs text-zinc-400">Renews on Oct 12, 2024</span>
+<span class="text-xs font-bold text-[#cfb095]">MANAGE</span>
+</div>
+</section>
+<!-- Activity Section -->
+<section class="space-y-4">
+<div class="flex justify-between items-center px-1">
+<h3 class="text-sm font-bold uppercase tracking-widest text-zinc-400">Public README Activity</h3>
+<span class="text-[10px] font-bold text-primary">VIEW ALL</span>
+</div>
+<div class="space-y-3">
+<!-- Activity Item 1 -->
+<div class="bg-white p-4 rounded-2xl shadow-sm border border-outline-variant/20 flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center text-[#cfb095]">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-on-surface">nexus-core-api</h4>
+<p class="text-[10px] text-zinc-500 font-medium">3 hours ago • Documentation</p>
+</div>
+<div class="text-right">
+<div class="text-sm font-black text-[#cfb095]">98</div>
+<div class="text-[9px] font-bold text-zinc-400 uppercase">SCORE</div>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="bg-white p-4 rounded-2xl shadow-sm border border-outline-variant/20 flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-on-surface">quantum-js-sdk</h4>
+<p class="text-[10px] text-zinc-500 font-medium">Yesterday • AI Generation</p>
+</div>
+<div class="text-right">
+<div class="text-sm font-black text-[#cfb095]">94</div>
+<div class="text-[9px] font-bold text-zinc-400 uppercase">SCORE</div>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="bg-white p-4 rounded-2xl shadow-sm border border-outline-variant/20 flex items-center gap-4 opacity-70">
+<div class="w-12 h-12 bg-surface-container-high rounded-xl flex items-center justify-center text-zinc-400">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-on-surface">legacy-auth-module</h4>
+<p class="text-[10px] text-zinc-500 font-medium">2 days ago • Archive</p>
+</div>
+<div class="text-right">
+<div class="text-sm font-black text-zinc-400">82</div>
+<div class="text-[9px] font-bold text-zinc-400 uppercase">SCORE</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl rounded-t-[1.5rem] shadow-[0px_-10px_30px_rgba(207,176,149,0.1)]">
+<div class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 py-1 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-inter text-[11px] font-medium tracking-wide uppercase mt-1">Explorer</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 py-1 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+<span class="font-inter text-[11px] font-medium tracking-wide uppercase mt-1">Build</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 py-1 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-inter text-[11px] font-medium tracking-wide uppercase mt-1">Stats</span>
+</div>
+<!-- Active: Profile -->
+<div class="flex flex-col items-center justify-center text-[#cfb095] dark:text-[#cfb095] bg-[#cfb095]/10 rounded-xl px-4 py-1">
+<span class="material-symbols-outlined" data-icon="person_outline" style="font-variation-settings: 'FILL' 1;">person_outline</span>
+<span class="font-inter text-[11px] font-medium tracking-wide uppercase mt-1">Profile</span>
+</div>
+</nav>
+</body></html>

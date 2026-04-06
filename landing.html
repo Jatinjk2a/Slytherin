@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>README AI - The Digital Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#cfb095", // Hazelnut
+                        "on-primary": "#ffffff",
+                        "secondary": "#a68d77",
+                        "background": "#ffffff",
+                        "surface": "#ffffff",
+                        "on-background": "#1a1a1a",
+                        "on-surface": "#1a1a1a",
+                        "surface-variant": "#f8f8f8",
+                        "on-surface-variant": "#5a5a5a",
+                        "outline": "#e0e0e0",
+                        "outline-variant": "#f0f0f0",
+                        "surface-container-low": "#fafafa",
+                        "surface-container": "#f5f5f5",
+                        "surface-container-high": "#ebebeb",
+                        "surface-container-highest": "#e0e0e0",
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Manrope"],
+                        body: ["Inter"],
+                        label: ["Inter"],
+                        mono: ["JetBrains Mono", "monospace"],
+                        display: "Manrope"
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #1a1a1a; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, #cfb095 0%, #a68d77 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hazelnut-button {
+            background-color: #cfb095;
+            color: #ffffff;
+        }
+        .hazelnut-button:hover {
+            background-color: #bd9e83;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="selection:bg-primary/30">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-8 h-16 sticky top-0 z-50 bg-white/80 backdrop-blur-xl font-['Inter'] text-sm border-b border-outline-variant">
+<div class="flex items-center gap-8">
+<span class="text-lg font-black text-on-background tracking-tight">README AI</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-all font-medium" href="#">Docs</a>
+<a class="text-on-surface-variant hover:text-primary transition-all font-medium" href="#">Community</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-4 mr-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-on-background transition-colors" data-icon="light_mode">light_mode</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-on-background transition-colors" data-icon="account_circle">account_circle</span>
+</div>
+<button class="hazelnut-button px-6 py-2 rounded-full font-bold tracking-tight active:scale-95 transition-all">
+            Generate
+        </button>
+</div>
+</header>
+<main class="relative overflow-hidden">
+<!-- Hero Section -->
+<section class="relative pt-24 pb-32 px-8 flex flex-col items-center text-center max-w-7xl mx-auto">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-low border border-outline mb-8">
+<span class="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-semibold text-primary tracking-widest uppercase">The Digital Curator is Live</span>
+</div>
+<h1 class="font-headline font-extrabold text-6xl md:text-8xl tracking-tight text-on-background mb-6 max-w-5xl">
+            Turn your code into <span class="gradient-text">a story</span>
+</h1>
+<p class="font-body text-xl text-on-surface-variant max-w-2xl mb-12 leading-relaxed">
+            Experience high-end editorial documentation powered by intelligence. We don't just generate text; we present your architecture with authoritative precision.
+        </p>
+<div class="flex flex-col sm:flex-row gap-4 mb-24">
+<button class="hazelnut-button text-lg font-bold px-10 py-5 rounded-2xl tracking-wide shadow-lg hover:shadow-xl transition-all">
+                GENERATE README
+            </button>
+<button class="bg-surface-container text-on-background text-lg font-bold px-10 py-5 rounded-2xl hover:bg-surface-container-high transition-all border border-outline">
+                View Demo
+            </button>
+</div>
+<!-- Demo Dashboard View -->
+<div class="w-full max-w-6xl relative">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-3xl blur opacity-10"></div>
+<div class="relative glass-panel rounded-3xl p-4 md:p-8 border border-outline shadow-xl">
+<!-- Dashboard Header -->
+<div class="flex flex-col md:flex-row gap-4 items-center justify-between mb-8 pb-8 border-b border-outline">
+<div class="w-full md:w-2/3 relative group">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant" data-icon="link">link</span>
+<input class="w-full bg-surface-container-low border border-outline rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary/40 transition-all" placeholder="https://github.com/username/repository" type="text"/>
+</div>
+<button class="w-full md:w-auto hazelnut-button px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+                        Analyze Repo
+                    </button>
+</div>
+<!-- Asymmetric Preview Area -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 text-left">
+<!-- Left: Code Input Analysis -->
+<div class="lg:col-span-5 bg-on-background rounded-2xl p-6 overflow-hidden">
+<div class="flex items-center gap-2 mb-4">
+<span class="text-xs font-mono text-primary/70 uppercase tracking-widest">Repository Context</span>
+</div>
+<div class="font-mono text-sm space-y-3">
+<div class="flex gap-4"><span class="text-primary/30">01</span> <span class="text-white">import { curate } from "@readme-ai/core";</span></div>
+<div class="flex gap-4"><span class="text-primary/30">02</span> <span class="text-white">const repo = await load("octocat/hello-world");</span></div>
+<div class="flex gap-4"><span class="text-primary/30">03</span> <span class="text-white">const analysis = await repo.analyze();</span></div>
+<div class="flex gap-4"><span class="text-primary/30">04</span> <span class="text-primary"># Found 12 components</span></div>
+<div class="flex gap-4"><span class="text-primary/30">05</span> <span class="text-primary"># Mapping architectural flow...</span></div>
+<div class="flex gap-4"><span class="text-primary/30">06</span> <span class="text-white">generate(analysis, { theme: "minimal" });</span></div>
+</div>
+</div>
+<!-- Right: Markdown Output -->
+<div class="lg:col-span-7 bg-white rounded-2xl p-8 border border-outline">
+<div class="flex items-center justify-between mb-6">
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-red-400"></div>
+<div class="w-3 h-3 rounded-full bg-amber-400"></div>
+<div class="w-3 h-3 rounded-full bg-green-400"></div>
+</div>
+<span class="text-xs font-mono text-on-surface-variant">README.md</span>
+</div>
+<h3 class="font-headline font-bold text-3xl text-on-background mb-4">Project Phoenix</h3>
+<p class="text-on-surface-variant mb-6 text-sm leading-relaxed">
+                            A high-performance synchronization engine built with Rust. Phoenix provides eventually consistent state across distributed nodes with zero overhead.
+                        </p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container p-4 rounded-xl">
+<div class="text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Architecture</div>
+<div class="text-primary font-bold text-xs">Event-Driven Mesh</div>
+</div>
+<div class="bg-surface-container p-4 rounded-xl">
+<div class="text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Primary Stack</div>
+<div class="text-primary font-bold text-xs">Rust • WASM • GRPC</div>
+</div>
+</div>
+<div class="h-2 w-full bg-surface-container-low rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="py-32 px-8 max-w-7xl mx-auto bg-surface-container-low rounded-[3rem]">
+<div class="text-center mb-20">
+<h2 class="font-headline text-4xl font-extrabold text-on-background mb-4 italic">The Developer's Edge</h2>
+<div class="h-1.5 w-24 bg-primary mx-auto rounded-full"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- AI-Powered -->
+<div class="group bg-white p-8 rounded-3xl border border-outline hover:border-primary/50 hover:shadow-xl transition-all duration-300">
+<div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="neurology">neurology</span>
+</div>
+<h3 class="font-headline text-xl font-bold text-on-background mb-4">AI-Powered Curation</h3>
+<p class="text-on-surface-variant leading-relaxed">
+                    Our model doesn't just read files; it understands intent. It extracts the soul of your code to write documentation that sounds human.
+                </p>
+</div>
+<!-- One-Click -->
+<div class="group bg-white p-8 rounded-3xl border border-outline hover:border-primary/50 hover:shadow-xl transition-all duration-300">
+<div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="touch_app">touch_app</span>
+</div>
+<h3 class="font-headline text-xl font-bold text-on-background mb-4">One-Click Polish</h3>
+<p class="text-on-surface-variant leading-relaxed">
+                    Input a URL, click a button, and receive a professional README ready for your top-tier repositories. No configuration hell.
+                </p>
+</div>
+<!-- GitHub Push -->
+<div class="group bg-white p-8 rounded-3xl border border-outline hover:border-primary/50 hover:shadow-xl transition-all duration-300">
+<div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="publish">publish</span>
+</div>
+<h3 class="font-headline text-xl font-bold text-on-background mb-4">Native GitHub Push</h3>
+<p class="text-on-surface-variant leading-relaxed">
+                    Seamlessly commit generated docs back to your repository. Integrated directly with your workflow through secure OAuth.
+                </p>
+</div>
+</div>
+</section>
+<!-- Final CTA Section -->
+<section class="py-24 px-8">
+<div class="max-w-5xl mx-auto rounded-[3rem] overflow-hidden relative border border-outline">
+<div class="absolute inset-0 bg-surface-container-low"></div>
+<div class="relative z-10 p-12 md:p-20 flex flex-col items-center text-center">
+<h2 class="font-headline text-4xl md:text-5xl font-extrabold text-on-background mb-8">Ready to curate your next masterpiece?</h2>
+<div class="flex flex-col sm:flex-row gap-6 w-full max-w-lg">
+<input class="flex-grow bg-white border border-outline text-on-background rounded-2xl px-6 py-4 focus:ring-primary focus:border-primary" placeholder="Enter your email" type="email"/>
+<button class="hazelnut-button px-8 py-4 rounded-2xl font-bold text-lg whitespace-nowrap shadow-lg">Get Started</button>
+</div>
+<p class="mt-8 text-on-surface-variant font-medium text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+                    Join 2,000+ developers documenting with README AI
+                </p>
+</div>
+<!-- Decorative background elements -->
+<div class="absolute -top-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-[100px]"></div>
+<div class="absolute -bottom-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-[100px]"></div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low border-t border-outline py-16 px-8 mt-20">
+<div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12">
+<div class="col-span-2 md:col-span-1">
+<div class="text-xl font-black text-on-background mb-6">README AI</div>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+                The Digital Curator for professional developers. Elevate your documentation from static text to architectural stories.
+            </p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="public">public</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="terminal">terminal</span>
+</div>
+</div>
+<div>
+<h4 class="text-on-background font-bold mb-6">Product</h4>
+<ul class="space-y-4 text-on-surface-variant text-sm font-medium">
+<li><a class="hover:text-primary transition-colors" href="#">Features</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Documentation</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-on-background font-bold mb-6">Company</h4>
+<ul class="space-y-4 text-on-surface-variant text-sm font-medium">
+<li><a class="hover:text-primary transition-colors" href="#">About</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Blog</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-on-background font-bold mb-6">Support</h4>
+<ul class="space-y-4 text-on-surface-variant text-sm font-medium">
+<li><a class="hover:text-primary transition-colors" href="#">Help Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Legal</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-outline flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="text-on-surface-variant text-xs">© 2024 README AI. All rights reserved.</div>
+<div class="flex gap-8 text-xs text-on-surface-variant font-medium">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</body></html>
