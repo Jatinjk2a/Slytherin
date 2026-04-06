@@ -8,10 +8,23 @@ services:
     environment:
       - XAI_API_KEY=${XAI_API_KEY}
       - GITHUB_TOKEN=${GITHUB_TOKEN}
-      - GROK_MODEL=${GROK_MODEL:-grok-beta}
+      - GROK_MODEL=${GROK_MODEL:-llama-3.3-70b-versatile}
+      - MONGO_URI=mongodb://mongo:27017
     volumes:
-      - .:/app                      # hot reload in dev
+      - .:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health').raise_for_status()"]

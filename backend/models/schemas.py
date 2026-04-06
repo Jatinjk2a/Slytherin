@@ -53,6 +53,8 @@ class GenerateResponse(BaseModel):
     readme_content: str
     metadata: RepoMetadata
     tokens_used: int
+    score: Optional[float] = None
+    score_breakdown: Optional[dict] = None
 
 
 class PreviewResponse(BaseModel):
