@@ -80,6 +80,14 @@ const schemas = {
     custom_sections: Joi.array().items(Joi.string()).default([]),
   }),
 
+  regenerate: Joi.object({
+    job_id: Joi.string().required(),
+    feedback: Joi.string().min(5).max(2000).required(),
+    style: Joi.string().valid('standard', 'minimal', 'detailed', 'badges-heavy').optional(),
+    include_badges: Joi.boolean().optional(),
+    include_toc: Joi.boolean().optional(),
+  }),
+
   pushReadme: Joi.object({
     log_id: Joi.string().required(),
     commit_message: Joi.string().max(200).default('docs: update README via README AI'),

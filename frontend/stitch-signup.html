@@ -163,12 +163,74 @@
 <!-- 8. Footer Text -->
 <div class="mt-auto">
 <p class="text-sm text-zinc-500">
-                    Already have an account? 
-                    <a class="text-brand-hazel font-bold hover:underline decoration-2 underline-offset-4" href="#">Log In</a>
+  Already have an account?
+  <a class="text-brand-hazel font-bold hover:underline decoration-2 underline-offset-4" href="login.html">Log In</a>
 </p>
 </div>
 </div>
 </main>
+<!-- Error Banner -->
+<div id="error-banner" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-[999] px-5 py-3 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm font-medium flex items-center gap-2 shadow-lg">
+  <span class="material-symbols-outlined text-red-500 text-[18px]">error</span>
+  <span id="error-text"></span>
+</div>
 <!-- Decorative Bottom Gradient for Depth -->
 <div class="fixed bottom-0 left-0 w-full h-32 bg-gradient-to-t from-zinc-50/50 to-transparent pointer-events-none"></div>
+
+<script type="module">
+  import { api, showToast } from './js/api.js';
+  import { redirectIfAuth } from './js/auth.js';
+
+  // Redirect if already logged in
+  redirectIfAuth();
+
+  const form = document.querySelector('form');
+  const nameInput = form.querySelector('input[placeholder="Full Name"]');
+  const emailInput = form.querySelector('input[placeholder="Work Email"]');
+  const passwordInput = form.querySelector('input[placeholder="Password"]');
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const errorBanner = document.getElementById('error-banner');
+  const errorText = document.getElementById('error-text');
+
+  // Toggle password visibility
+  const eyeBtn = form.querySelector('button[type="button"]');
+  if (eyeBtn) {
+    eyeBtn.addEventListener('click', () => {
+      const isPass = passwordInput.type === 'password';
+      passwordInput.type = isPass ? 'text' : 'password';
+      eyeBtn.querySelector('.material-symbols-outlined').textContent = isPass ? 'visibility_off' : 'visibility';
+    });
+  }
+
+  function setLoading(loading) {
+    submitBtn.disabled = loading;
+    submitBtn.textContent = loading ? 'Creating account...' : 'Sign Up';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBanner.classList.add('hidden');
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!name || !email || !password) {
+      errorText.textContent = 'Please fill in all fields.';
+      errorBanner.classList.remove('hidden');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await api.register({ full_name: name, email, password });
+      showToast('Account created! Welcome to README AI 🎉', 'success');
+      setTimeout(() => { window.location.href = 'stitch-dashboard.html'; }, 900);
+    } catch (err) {
+      errorText.textContent = err.message || 'Registration failed. Please try again.';
+      errorBanner.classList.remove('hidden');
+      setLoading(false);
+    }
+  });
+</script>
 </body></html>

@@ -194,20 +194,101 @@
 </main>
 <!-- BottomNavBar -->
 <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pt-3 pb-8 bg-white/80 backdrop-blur-2xl z-50 rounded-t-[24px] shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
-<!-- Projects -->
-<button class="flex flex-col items-center justify-center text-slate-500 px-5 py-2 active:scale-90 transition-all duration-300 ease-out hover:text-hazelnut">
-<span class="material-symbols-outlined mb-1" data-icon="folder_open">folder_open</span>
+<button class="flex flex-col items-center justify-center text-slate-500 px-5 py-2 active:scale-90 transition-all duration-300 ease-out hover:text-hazelnut" onclick="window.location.href='stitch-dashboard.html'">
+<span class="material-symbols-outlined mb-1">folder_open</span>
 <span class="font-inter text-[11px] font-semibold tracking-wide uppercase">Projects</span>
 </button>
-<!-- Stats (Active) -->
 <button class="flex flex-col items-center justify-center bg-hazelnut/10 text-hazelnut rounded-2xl px-5 py-2 active:scale-90 transition-all duration-300 ease-out">
-<span class="material-symbols-outlined mb-1" data-icon="insights" style="font-variation-settings: 'FILL' 1;">insights</span>
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">insights</span>
 <span class="font-inter text-[11px] font-semibold tracking-wide uppercase">Stats</span>
 </button>
-<!-- Settings -->
-<button class="flex flex-col items-center justify-center text-slate-500 px-5 py-2 active:scale-90 transition-all duration-300 ease-out hover:text-hazelnut">
-<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+<button class="flex flex-col items-center justify-center text-slate-500 px-5 py-2 active:scale-90 transition-all duration-300 ease-out hover:text-hazelnut" onclick="window.location.href='settings.html'">
+<span class="material-symbols-outlined mb-1">settings</span>
 <span class="font-inter text-[11px] font-semibold tracking-wide uppercase">Settings</span>
 </button>
 </nav>
+
+<script type="module">
+  import { showToast, getUser } from './js/api.js';
+  import { requireAuth } from './js/auth.js';
+
+  if (!requireAuth()) throw new Error('Redirecting');
+
+  // Back button
+  document.querySelector('span[data-icon="arrow_back"]')?.addEventListener('click', () => history.back());
+
+  // Load score from sessionStorage (set by dashboard)
+  const scoreData = JSON.parse(sessionStorage.getItem('readme_score') || 'null');
+
+  const scoreEl = document.querySelector('.font-headline.font-extrabold.text-5xl');
+  const circleEl = document.querySelector('.progress-ring-circle');
+  const labelEl = document.querySelector('h2.font-headline.text-2xl');
+  const subtextEl = document.querySelector('p.text-slate-500.mt-1');
+
+  function animateScore(score) {
+    const pct = Math.round(score);
+    const circumference = 2 * Math.PI * 42;  // 263.89
+    const offset = circumference - (circumference * pct / 100);
+
+    if (scoreEl) scoreEl.textContent = pct;
+    if (circleEl) {
+      circleEl.style.transition = 'stroke-dashoffset 1.2s ease';
+      circleEl.style.strokeDashoffset = offset;
+    }
+
+    const label = pct >= 90 ? 'Excellent Status' : pct >= 75 ? 'Good Standing' : pct >= 60 ? 'Fair Condition' : 'Needs Improvement';
+    const subtext = pct >= 90 ? 'Your documentation is in top shape.' : pct >= 75 ? 'A few improvements could boost your score.' : 'Consider expanding your README sections.';
+    if (labelEl) labelEl.textContent = label;
+    if (subtextEl) subtextEl.textContent = subtext;
+  }
+
+  if (scoreData) {
+    animateScore(scoreData.score);
+
+    // Update metric cards with real breakdown
+    const breakdown = scoreData.breakdown || {};
+    const cards = document.querySelectorAll('.grid.grid-cols-2 > div');
+    const metricMap = [
+      { key: 'readme_quality', max: 30, label: 'README Quality', icon: 'auto_stories' },
+      { key: 'code_structure', max: 30, label: 'Code Structure', icon: 'verified_user' },
+      { key: 'activity', max: 20, label: 'Activity Score', icon: 'checklist' },
+      { key: 'documentation', max: 20, label: 'Documentation', icon: 'gpp_maybe' },
+    ];
+    cards.forEach((card, i) => {
+      const metric = metricMap[i];
+      if (!metric) return;
+      const val = breakdown[metric.key] ?? 0;
+      const pct = Math.round((val / metric.max) * 100);
+      const badge = card.querySelector('span.bg-emerald-100, span.bg-slate-200');
+      const valueEl = card.querySelector('p.font-headline.font-bold.text-lg');
+      if (badge) {
+        badge.textContent = pct >= 80 ? 'High' : pct >= 50 ? 'Medium' : 'Low';
+        badge.className = pct >= 80
+          ? 'bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase'
+          : pct >= 50
+          ? 'bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase'
+          : 'bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase';
+      }
+      if (valueEl) valueEl.textContent = `${val} / ${metric.max}`;
+    });
+
+    // AI Insight
+    const insightEl = document.querySelector('.bg-slate-900 p.text-white');
+    if (insightEl && scoreData.score < 100) {
+      const lowest = Object.entries(breakdown).sort((a, b) => (a[1]/30) - (b[1]/30))[0];
+      const lowestLabel = { readme_quality: 'README completeness', code_structure: 'code structure', activity: 'repository activity', documentation: 'documentation standards' };
+      insightEl.textContent = `Boost score to ${Math.min(100, Math.round(scoreData.score + 10)}/100 by improving ${lowestLabel[lowest[0]] || 'documentation'}.`;
+    }
+  } else {
+    // No data — show placeholder and redirect prompt
+    if (scoreEl) scoreEl.textContent = '—';
+    if (labelEl) labelEl.textContent = 'No Data Yet';
+    if (subtextEl) subtextEl.textContent = 'Generate a README from the dashboard to see your score.';
+    const optimizeBtn = document.querySelector('.bg-hazelnut.text-white.px-4.py-2');
+    if (optimizeBtn) {
+      optimizeBtn.textContent = 'Go to Dashboard';
+      optimizeBtn.addEventListener('click', () => { window.location.href = 'stitch-dashboard.html'; });
+    }
+  }
+</script>
 </body></html>

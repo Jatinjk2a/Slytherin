@@ -1,5 +1,5 @@
 fastapi
-uvicorn
+uvicorn[standard]
 httpx
 pydantic
 pydantic-settings
@@ -7,3 +7,6 @@ openai
 pytest
 pytest-asyncio
 motor
+python-jose[cryptography]
+bcrypt
+python-multipart

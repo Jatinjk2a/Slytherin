@@ -10,6 +10,7 @@ class RepositoryDB(BaseModel):
     id: str = Field(default_factory=generate_uuid, alias="_id")
     repo_name: str
     github_url: str
+    user_id: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 class ReadmeDB(BaseModel):
@@ -24,6 +25,16 @@ class ScoreDB(BaseModel):
     score_breakdown: Dict[str, float]
     total_score: float
     evaluated_at: datetime = Field(default_factory=datetime.utcnow)
+
+    class Config:
+        populate_by_name = True
+
+class UserDB(BaseModel):
+    id: str = Field(default_factory=generate_uuid, alias="_id")
+    full_name: str
+    email: str
+    hashed_password: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
         populate_by_name = True

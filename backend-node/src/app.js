@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const passport = require('passport');
+const path = require('path');
 
 const logger = require('./utils/logger');
 const errorHandler = require('./middlewares/errorHandler');
@@ -22,9 +23,16 @@ require('./config/passport');
 const app = express();
 
 // ── Security & Parsing ────────────────────────────────────────────────────────
-app.use(helmet());
+app.use(helmet({
+  // Relax CSP in dev so the SPA can load fonts/scripts from CDNs
+  contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false,
+}));
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  // In dev, reflect the request origin so file://, localhost:*, etc. all work.
+  // In production, restrict to FRONTEND_URL.
+  origin: process.env.NODE_ENV === 'production'
+    ? (process.env.FRONTEND_URL || false)
+    : true,
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -38,7 +46,6 @@ app.use(morgan('combined', {
 // ── Timing Header ─────────────────────────────────────────────────────────────
 app.use((req, res, next) => {
   const start = Date.now();
-  // Intercept write to inject header before first byte is flushed
   const originalWrite = res.write.bind(res);
   const originalEnd = res.end.bind(res);
 
@@ -60,16 +67,12 @@ app.use(passport.initialize());
 // ── Rate Limiting (global) ────────────────────────────────────────────────────
 app.use(globalRateLimiter);
 
-// ── Health ────────────────────────────────────────────────────────────────────
-app.get('/', (req, res) => {
-  res.json({
-    service: 'README AI',
-    version: '1.0.0',
-    status: 'running',
-    docs: '/api/docs',
-  });
-});
+// ── Static frontend ───────────────────────────────────────────────────────────
+// Serve the /frontend folder from the root so http://localhost:5000 loads the UI.
+const FRONTEND_DIR = path.join(__dirname, '../../frontend');
+app.use(express.static(FRONTEND_DIR));
 
+// ── Health ────────────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
@@ -82,9 +85,9 @@ app.use('/api/repo', scoreRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/github', githubRoutes);
 
-// ── 404 ───────────────────────────────────────────────────────────────────────
-app.use((req, res) => {
-  res.status(404).json({ success: false, error: `Route ${req.originalUrl} not found` });
+// ── SPA fallback — serve index.html for any non-API route ────────────────────
+app.get(/^(?!\/api).*/, (req, res) => {
+  res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
 });
 
 // ── Global Error Handler ──────────────────────────────────────────────────────

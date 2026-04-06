@@ -276,4 +276,73 @@
 <p class="text-sm text-zinc-300">© 2024 README AI Engine. Built for developers.</p>
 </footer>
 </main>
+
+<script type="module">
+  import { api, showToast, getUser, setUser } from './js/api.js';
+  import { requireAuth, logout } from './js/auth.js';
+
+  if (!requireAuth()) throw new Error('Redirecting');
+
+  // Wire nav links
+  const navLinks = { Home: 'stitch-dashboard.html', History: 'history.html', Settings: 'settings.html', Upgrade: 'stitch-billing.html' };
+  document.querySelectorAll('nav a').forEach(a => {
+    const text = a.querySelector('span:last-child')?.textContent?.trim();
+    if (navLinks[text]) a.href = navLinks[text];
+  });
+
+  // Populate user profile
+  const user = getUser();
+  if (user) {
+    const nameInput = document.querySelector('input[type="text"][value="Alex Rivera"]');
+    const emailInput = document.querySelector('input[type="email"][value="alex.rivera@readme.ai"]');
+    if (nameInput) nameInput.value = user.full_name || '';
+    if (emailInput) emailInput.value = user.email || '';
+  }
+
+  // Save Profile button
+  const saveBtn = document.querySelector('button.px-8.py-3.bg-hazelnut');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      showToast('Profile settings saved locally.', 'success');
+    });
+  }
+
+  // New README button in sidebar
+  document.querySelector('button.w-full.py-2\\.5.bg-hazelnut')?.addEventListener('click', () => {
+    window.location.href = 'stitch-dashboard.html';
+  });
+
+  // Logout — wire to user avatar area
+  document.querySelector('button.w-full.py-2\\.5')?.addEventListener('dblclick', () => logout());
+
+  // Tone preference
+  document.querySelectorAll('.grid.grid-cols-2.gap-2 button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.grid.grid-cols-2.gap-2 button').forEach(b => {
+        b.className = 'py-3 rounded-xl border-2 border-transparent bg-white text-zinc-400 hover:text-zinc-600 font-bold text-xs transition-colors';
+      });
+      btn.className = 'py-3 rounded-xl border-2 border-hazelnut bg-hazelnut/5 text-hazelnut font-bold text-xs';
+      showToast(`Tone set to ${btn.textContent.trim()}`, 'success');
+    });
+  });
+
+  // Theme toggle
+  document.querySelectorAll('.flex.p-1.bg-white.rounded-xl.gap-1 button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const icon = btn.querySelector('.material-symbols-outlined')?.textContent?.trim();
+      if (icon === 'dark_mode') {
+        document.documentElement.classList.add('dark');
+        showToast('Dark mode enabled', 'info');
+      } else {
+        document.documentElement.classList.remove('dark');
+        showToast('Light mode enabled', 'info');
+      }
+    });
+  });
+
+  // View Billing History button
+  document.querySelector('button.w-full.py-4.bg-white')?.addEventListener('click', () => {
+    window.location.href = 'stitch-billing.html';
+  });
+</script>
 </body></html>

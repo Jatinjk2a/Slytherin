@@ -206,30 +206,87 @@
 </section>
 </main>
 <!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-2xl rounded-t-[1.5rem] z-50 shadow-[0px_-10px_30px_rgba(0,0,0,0.05)]">
-<div class="flex justify-around items-center px-4 pb-6 pt-2">
-<!-- Nav Item: Projects -->
-<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors" href="#">
-<span class="material-symbols-outlined">folder_open</span>
-<span class="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Projects</span>
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-6 pt-2 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl rounded-t-[1.5rem] border-t border-zinc-200/15 dark:border-zinc-800/15 shadow-[0px_-20px_40px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform" href="stitch-dashboard.html">
+<span class="material-symbols-outlined">home</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">Home</span>
 </a>
-<!-- Nav Item: Generate -->
-<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors" href="#">
-<span class="material-symbols-outlined">auto_awesome</span>
-<span class="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Generate</span>
+<a class="flex flex-col items-center justify-center bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-xl p-3 active:scale-90 transition-transform" href="stitch-setup.html">
+<span class="material-symbols-outlined">tune</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">Setup</span>
 </a>
-<!-- Nav Item: History -->
-<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors" href="#">
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform" href="history.html">
 <span class="material-symbols-outlined">history</span>
-<span class="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">History</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">History</span>
 </a>
-<!-- Nav Item: Settings (Active) -->
-<a class="flex flex-col items-center justify-center bg-indigo-100/50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-xl p-3 active:scale-90 transition-transform duration-300 ease-out" href="#">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
-<span class="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Settings</span>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform" href="settings.html">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">Settings</span>
 </a>
-</div>
 </nav>
+
+<script type="module">
+  import { showToast, prefs } from './js/api.js';
+  import { requireAuth } from './js/auth.js';
+
+  if (!requireAuth()) throw new Error('Redirecting');
+
+  // Back button
+  document.querySelector('button.rounded-full')?.addEventListener('click', () => history.back());
+
+  // Load saved style preference
+  const savedStyle = prefs.get('style', 'standard');
+
+  // Style chip selection
+  const styleChips = document.querySelectorAll('button[class*="rounded-full"]');
+  styleChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const text = chip.textContent.trim().toLowerCase();
+      if (['minimal', 'standard', 'detailed'].includes(text)) {
+        prefs.set('style', text);
+        showToast(`Style set to ${chip.textContent.trim()}`, 'success');
+        // Update active chip visually
+        styleChips.forEach(c => {
+          if (['minimal', 'standard', 'detailed'].includes(c.textContent.trim().toLowerCase())) {
+            c.classList.remove('bg-indigo-600', 'text-white');
+            c.classList.add('bg-white', 'text-zinc-700', 'border', 'border-zinc-200');
+          }
+        });
+        chip.classList.remove('bg-white', 'text-zinc-700', 'border', 'border-zinc-200');
+        chip.classList.add('bg-indigo-600', 'text-white');
+      }
+    });
+  });
+
+  // Ignore paths input
+  const addBtn = document.querySelector('button[class*="bg-indigo"]');
+  const ignoreInput = document.querySelector('input[placeholder*="path"]') || document.querySelector('input[type="text"]');
+  const ignoreList = prefs.get('ignore_paths', []);
+
+  if (addBtn && ignoreInput) {
+    addBtn.addEventListener('click', () => {
+      const path = ignoreInput.value.trim();
+      if (path && !ignoreList.includes(path)) {
+        ignoreList.push(path);
+        prefs.set('ignore_paths', ignoreList);
+        ignoreInput.value = '';
+        showToast(`Added: ${path}`, 'success');
+      }
+    });
+    ignoreInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') addBtn.click();
+    });
+  }
+
+  // Save button
+  const saveBtn = document.querySelector('button.w-full.bg-indigo-600');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      showToast('Setup preferences saved!', 'success');
+      setTimeout(() => { window.location.href = 'stitch-dashboard.html'; }, 800);
+    });
+  }
+</script>
 <!-- Background Decorative Element -->
 <div class="fixed top-0 right-0 -z-10 w-64 h-64 bg-hazelnut/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
 <div class="fixed bottom-0 left-0 -z-10 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl -ml-40 -mb-40"></div>

@@ -76,6 +76,8 @@ async function processJob(job) {
     final_markdown: markdown,
     score: scoreData,
     generation_options: generationOptions,
+    repo_metadata: metadata,
+    tokens_used,
   });
 
   await job.updateProgress(100);

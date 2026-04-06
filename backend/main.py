@@ -1,9 +1,10 @@
-from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Request, BackgroundTasks, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from collections import defaultdict
 import logging
 import time
+from typing import Optional
 
 from models.schemas import (
     GenerateRequest,
@@ -20,6 +21,8 @@ from services.scoring import score_repository
 from cache import metadata_cache, readme_cache, readme_cache_key
 from database import verify_db_connection, repositories_collection, readmes_collection, scores_collection
 from models.db_models import RepositoryDB, ReadmeDB, ScoreDB
+from auth import get_current_user, get_optional_user
+from routes.auth_routes import router as auth_router
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -42,11 +45,21 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        # Allow file:// and local dev access
+        "*",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include auth router
+app.include_router(auth_router)
 
 # ── Simple in-process rate limiter (IP-based) ─────────────────────────────────
 _rate_store: dict[str, list[float]] = defaultdict(list)
@@ -82,12 +95,12 @@ async def startup_db():
     await verify_db_connection()
 
 
-async def save_to_db(repo_url: str, metadata, readme_content: str, score_data: dict):
+async def save_to_db(repo_url: str, metadata, readme_content: str, score_data: dict, user_id: Optional[str] = None):
     if repositories_collection is None:
         return
         
     try:
-        repo_db = RepositoryDB(repo_name=metadata.name, github_url=repo_url)
+        repo_db = RepositoryDB(repo_name=metadata.name, github_url=repo_url, user_id=user_id)
         readme_db = ReadmeDB(repo_id=repo_db.id, content=readme_content)
         score_db = ScoreDB(
             repo_id=repo_db.id, 
@@ -127,7 +140,7 @@ async def root():
         "service": "ReadmeAI",
         "status": "running",
         "version": "1.0.0",
-        "endpoints": ["/generate", "/regenerate", "/preview", "/cache/stats", "/cache/bust"],
+        "endpoints": ["/generate", "/regenerate", "/preview", "/history", "/auth/register", "/auth/login", "/auth/me"],
     }
 
 
@@ -143,7 +156,12 @@ async def health():
     tags=["README"],
     summary="Generate a README from a GitHub repo URL",
 )
-async def generate(req: GenerateRequest, request: Request, background_tasks: BackgroundTasks):
+async def generate(
+    req: GenerateRequest,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    current_user: Optional[dict] = Depends(get_optional_user),
+):
     """
     Full pipeline:
     1. Check README cache (skip GitHub + Claude if hit)
@@ -192,8 +210,9 @@ async def generate(req: GenerateRequest, request: Request, background_tasks: Bac
         result.score = score_data["total_score"]
         result.score_breakdown = score_data["score_breakdown"]
         
-        # Save payload back to DB
-        background_tasks.add_task(save_to_db, req.repo_url, metadata, result.readme_content, score_data)
+        # Save payload back to DB (with user_id if authenticated)
+        user_id = current_user["sub"] if current_user else None
+        background_tasks.add_task(save_to_db, req.repo_url, metadata, result.readme_content, score_data, user_id)
         
     except Exception as e:
         logger.exception("Claude generation failed")
@@ -210,18 +229,19 @@ async def generate(req: GenerateRequest, request: Request, background_tasks: Bac
     tags=["README"],
     summary="Revise an existing README based on feedback",
 )
-async def regenerate(req: RegenerateRequest, request: Request, background_tasks: BackgroundTasks):
+async def regenerate(
+    req: RegenerateRequest,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    current_user: Optional[dict] = Depends(get_optional_user),
+):
     """
     Takes your current README + natural-language feedback.
     Returns an improved version without re-parsing the repo.
-
-    Example feedback: "Add a Contributing section and make the installation
-    steps more detailed. The description is too vague."
     """
     ip = request.client.host if request.client else "unknown"
     _check_rate_limit(ip)
 
-    # We need metadata — try cache first, parse if miss
     metadata = metadata_cache.get(req.repo_url)
     if not metadata:
         try:
@@ -243,18 +263,16 @@ async def regenerate(req: RegenerateRequest, request: Request, background_tasks:
             include_toc=req.include_toc,
         )
         
-        # Calculate Score
         score_data = score_repository(metadata)
         result.score = score_data["total_score"]
         result.score_breakdown = score_data["score_breakdown"]
         
-        # Save payload back to DB
-        background_tasks.add_task(save_to_db, req.repo_url, metadata, result.readme_content, score_data)
+        user_id = current_user["sub"] if current_user else None
+        background_tasks.add_task(save_to_db, req.repo_url, metadata, result.readme_content, score_data, user_id)
     except Exception as e:
         logger.exception("Claude regeneration failed")
         raise HTTPException(status_code=500, detail=f"Regeneration failed: {e}")
 
-    # Bust old cache entry, store new
     cache_key = readme_cache_key(req.repo_url, req.style, req.include_badges, req.include_toc)
     readme_cache.set(cache_key, result)
     return result
@@ -267,10 +285,6 @@ async def regenerate(req: RegenerateRequest, request: Request, background_tasks:
     summary="Quick preview — returns raw Markdown as plain text",
 )
 async def preview(repo_url: str, request: Request):
-    """
-    Lightweight endpoint for live preview panels.
-    Always uses standard style. Returns Content-Type: text/plain.
-    """
     ip = request.client.host if request.client else "unknown"
     _check_rate_limit(ip)
 
@@ -291,10 +305,54 @@ async def preview(repo_url: str, request: Request):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ── History ────────────────────────────────────────────────────────────────────
+@app.get("/history", tags=["README"])
+async def get_history(
+    current_user: dict = Depends(get_current_user),
+    limit: int = 20,
+    skip: int = 0,
+):
+    """Return the authenticated user's README generation history."""
+    if repositories_collection is None:
+        return {"items": [], "total": 0}
+    
+    user_id = current_user["sub"]
+    
+    try:
+        cursor = repositories_collection.find(
+            {"user_id": user_id},
+            sort=[("created_at", -1)]
+        ).skip(skip).limit(limit)
+        
+        repos = await cursor.to_list(length=limit)
+        total = await repositories_collection.count_documents({"user_id": user_id})
+        
+        # Enrich with readme and score data
+        items = []
+        for repo in repos:
+            repo_id = repo.get("_id")
+            readme_doc = await readmes_collection.find_one({"repo_id": repo_id})
+            score_doc = await scores_collection.find_one({"repo_id": repo_id})
+            
+            items.append({
+                "id": repo_id,
+                "repo_name": repo.get("repo_name"),
+                "github_url": repo.get("github_url"),
+                "created_at": repo.get("created_at").isoformat() if repo.get("created_at") else None,
+                "readme_content": readme_doc.get("content") if readme_doc else None,
+                "total_score": score_doc.get("total_score") if score_doc else None,
+                "score_breakdown": score_doc.get("score_breakdown") if score_doc else None,
+            })
+        
+        return {"items": items, "total": total}
+    except Exception as e:
+        logger.error(f"Failed to fetch history: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch history.")
+
+
 # ── Cache management ───────────────────────────────────────────────────────────
 @app.get("/cache/stats", tags=["Cache"])
 async def cache_stats():
-    """Returns current cache sizes and config."""
     return {
         "metadata_cache": metadata_cache.stats(),
         "readme_cache": readme_cache.stats(),
@@ -303,7 +361,6 @@ async def cache_stats():
 
 @app.delete("/cache/bust", tags=["Cache"])
 async def cache_bust(repo_url: str):
-    """Force-invalidate all cached data for a given repo URL."""
     metadata_cache.delete(repo_url)
     for style in ReadmeStyle:
         for badges in (True, False):
@@ -315,7 +372,6 @@ async def cache_bust(repo_url: str):
 
 @app.delete("/cache/clear", tags=["Cache"])
 async def cache_clear():
-    """Wipe all caches. Use carefully."""
     metadata_cache.clear()
     readme_cache.clear()
     return {"status": "cleared"}

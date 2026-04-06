@@ -4,6 +4,7 @@ const {
   getStatus,
   getResult,
   downloadReadme,
+  regenerate,
 } = require('../controllers/generateController');
 const { requireAuth } = require('../middlewares/auth');
 const { validate, schemas } = require('../middlewares/validate');
@@ -14,6 +15,9 @@ router.use(requireAuth);
 
 // POST /api/generate
 router.post('/', generateRateLimiter, validate(schemas.generate), startGeneration);
+
+// POST /api/generate/regenerate  (must be before /:job_id routes)
+router.post('/regenerate', validate(schemas.regenerate), regenerate);
 
 // GET /api/generate/:job_id/status
 router.get('/:job_id/status', getStatus);

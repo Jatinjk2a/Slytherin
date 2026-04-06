@@ -58,6 +58,14 @@ const generationLogSchema = new mongoose.Schema(
       custom_sections: [String],
     },
     job_id: String, // BullMQ job ID for status polling
+    repo_metadata: {
+      type: mongoose.Schema.Types.Mixed,
+      default: null,
+    },
+    tokens_used: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },

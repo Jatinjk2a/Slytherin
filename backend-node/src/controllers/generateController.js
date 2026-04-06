@@ -5,7 +5,7 @@ const { enqueueGeneration } = require('../queues/generationQueue');
 const { isRedisAvailable } = require('../config/redis');
 const { fetchRepoMetadata } = require('../services/githubService');
 const { scoreRepository } = require('../services/scoringService');
-const { generateReadme } = require('../services/llmService');
+const { generateReadme, regenerateReadme } = require('../services/llmService');
 const { successResponse, errorResponse } = require('../utils/response');
 const logger = require('../utils/logger');
 
@@ -31,7 +31,7 @@ async function processSynchronously(log, repoUrl, options, prefs, userToken) {
       doc_tone: prefs?.doc_tone || 'professional',
     };
 
-    const { markdown } = await generateReadme(metadata, generationOptions);
+    const { markdown, tokens_used } = await generateReadme(metadata, generationOptions);
 
     await GenerationLog.findByIdAndUpdate(log._id, {
       status: 'completed',
@@ -39,6 +39,8 @@ async function processSynchronously(log, repoUrl, options, prefs, userToken) {
       final_markdown: markdown,
       score: scoreData,
       generation_options: generationOptions,
+      repo_metadata: metadata,
+      tokens_used,
     });
 
     logger.info(`Sync generation completed for ${repoUrl}`);
@@ -148,8 +150,59 @@ async function getResult(req, res) {
     repo_name: log.repo_name,
     markdown: log.final_markdown,
     score: log.score,
+    repo_metadata: log.repo_metadata || null,
+    tokens_used: log.tokens_used || 0,
     generation_options: log.generation_options,
     created_at: log.created_at,
+  });
+}
+
+// POST /api/generate/regenerate
+async function regenerate(req, res) {
+  const { job_id, feedback, style, include_badges, include_toc } = req.body;
+  const userId = req.user._id;
+
+  const originalLog = await GenerationLog.findOne({ _id: job_id, user_id: userId }).lean();
+  if (!originalLog) return errorResponse(res, 'Original job not found', 404);
+  if (originalLog.status !== 'completed') {
+    return errorResponse(res, 'Original generation must be completed before revising', 400);
+  }
+
+  const metadata = originalLog.repo_metadata || { full_name: originalLog.repo_name || 'Unknown' };
+
+  const { markdown, tokens_used } = await regenerateReadme(
+    originalLog.final_markdown,
+    feedback,
+    metadata
+  );
+
+  const newLog = await GenerationLog.create({
+    user_id: userId,
+    repo_url: originalLog.repo_url,
+    repo_name: originalLog.repo_name,
+    status: 'completed',
+    progress: 100,
+    final_markdown: markdown,
+    score: originalLog.score,
+    repo_metadata: metadata,
+    tokens_used,
+    generation_options: {
+      style: style || originalLog.generation_options?.style || 'standard',
+      include_badges: include_badges ?? originalLog.generation_options?.include_badges ?? true,
+      include_toc: include_toc ?? originalLog.generation_options?.include_toc ?? true,
+    },
+  });
+
+  logger.info(`Regeneration completed for ${originalLog.repo_url}`);
+
+  return successResponse(res, {
+    job_id: newLog._id.toString(),
+    repo_url: newLog.repo_url,
+    repo_name: newLog.repo_name,
+    markdown,
+    tokens_used,
+    score: newLog.score,
+    repo_metadata: metadata,
   });
 }
 
@@ -179,4 +232,4 @@ async function downloadReadme(req, res) {
   return res.send(log.final_markdown);
 }
 
-module.exports = { startGeneration, getStatus, getResult, downloadReadme };
+module.exports = { startGeneration, getStatus, getResult, downloadReadme, regenerate };

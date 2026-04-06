@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Log In | README AI</title>
+<meta name="description" content="Sign in to README AI — your AI-powered documentation curator."/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-container-low": "#f2f3ff",
+          "on-surface": "#131b2e",
+          "brand-hazel": "#cfb095"
+        },
+        fontFamily: { headline: ["Manrope"], body: ["Inter"], label: ["Inter"] }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .hazel-gradient { background: linear-gradient(135deg, #cfb095 0%, #b89a7d 100%); }
+  .soft-elevation { box-shadow: 0px 20px 40px rgba(207, 176, 149, 0.1); }
+  body { min-height: max(884px, 100dvh); }
+</style>
+</head>
+<body class="bg-white font-body text-on-surface antialiased overflow-hidden">
+<main class="flex min-h-screen w-full items-center justify-center p-6 bg-white">
+  <div class="w-full max-w-[400px] flex flex-col items-center">
+    <!-- Top Icon -->
+    <div class="mb-8 w-14 h-14 bg-surface-container-low rounded-2xl flex items-center justify-center text-brand-hazel soft-elevation">
+      <span class="material-symbols-outlined text-3xl">terminal</span>
+    </div>
+    <!-- Headline -->
+    <div class="text-center mb-10">
+      <h1 class="font-headline font-extrabold text-3xl tracking-tight text-on-surface mb-3">Welcome back</h1>
+      <p class="font-body text-zinc-500 text-sm leading-relaxed max-w-[280px] mx-auto">Sign in to continue curating your documentation.</p>
+    </div>
+    <!-- Error Banner -->
+    <div id="error-banner" class="hidden w-full mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm font-medium flex items-center gap-2">
+      <span class="material-symbols-outlined text-red-500 text-[18px]">error</span>
+      <span id="error-text"></span>
+    </div>
+    <!-- Form -->
+    <form id="login-form" class="w-full space-y-4 mb-8">
+      <div class="relative group">
+        <input id="email" name="email" type="email" required
+          class="w-full h-14 px-5 bg-surface-container-low border-none rounded-2xl text-sm focus:ring-2 focus:ring-brand-hazel/30 transition-all outline-none placeholder:text-zinc-400"
+          placeholder="Work Email"/>
+      </div>
+      <div class="relative group">
+        <input id="password" name="password" type="password" required
+          class="w-full h-14 px-5 bg-surface-container-low border-none rounded-2xl text-sm focus:ring-2 focus:ring-brand-hazel/30 transition-all outline-none placeholder:text-zinc-400 pr-14"
+          placeholder="Password"/>
+        <button type="button" id="toggle-password"
+          class="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-brand-hazel transition-colors">
+          <span class="material-symbols-outlined text-[20px]">visibility</span>
+        </button>
+      </div>
+      <div class="flex justify-end -mt-2">
+        <a href="stitch-passwordreset.html" class="text-xs text-zinc-400 hover:text-brand-hazel transition-colors font-medium">Forgot password?</a>
+      </div>
+      <!-- Submit Button -->
+      <button id="submit-btn" type="submit"
+        class="w-full h-14 hazel-gradient text-white font-bold rounded-2xl text-sm tracking-widest uppercase transition-transform active:scale-95 shadow-lg shadow-brand-hazel/20 mt-2 flex items-center justify-center gap-2">
+        <span id="btn-text">Log In</span>
+        <span id="btn-spinner" class="hidden">
+          <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+          </svg>
+        </span>
+      </button>
+    </form>
+    <!-- Divider -->
+    <div class="w-full flex items-center gap-4 mb-8">
+      <div class="h-[1px] flex-1 bg-zinc-100"></div>
+      <span class="text-[10px] font-bold tracking-[0.1em] text-zinc-400 uppercase">OR CONTINUE WITH</span>
+      <div class="h-[1px] flex-1 bg-zinc-100"></div>
+    </div>
+    <!-- Social Buttons -->
+    <div class="w-full grid grid-cols-2 gap-3 mb-10">
+      <button id="google-btn" class="flex items-center justify-center gap-3 h-14 bg-white border border-zinc-100 rounded-2xl text-sm font-medium text-zinc-600 hover:bg-zinc-50 transition-colors active:scale-[0.98]">
+        <span class="material-symbols-outlined text-[20px] text-zinc-400">account_circle</span>
+        <span>Google</span>
+      </button>
+      <button id="github-btn" class="flex items-center justify-center gap-3 h-14 bg-white border border-zinc-100 rounded-2xl text-sm font-medium text-zinc-600 hover:bg-zinc-50 transition-colors active:scale-[0.98]">
+        <span class="material-symbols-outlined text-[20px] text-zinc-400">code</span>
+        <span>GitHub</span>
+      </button>
+    </div>
+    <!-- Footer -->
+    <p class="text-sm text-zinc-500">
+      Don't have an account?
+      <a class="text-brand-hazel font-bold hover:underline decoration-2 underline-offset-4" href="stitch-signup.html">Sign Up</a>
+    </p>
+  </div>
+</main>
+<div class="fixed bottom-0 left-0 w-full h-32 bg-gradient-to-t from-zinc-50/50 to-transparent pointer-events-none"></div>
+
+<script type="module">
+  import { api, showToast } from './js/api.js';
+  import { redirectIfAuth } from './js/auth.js';
+
+  redirectIfAuth();
+
+  const form = document.getElementById('login-form');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const errorBanner = document.getElementById('error-banner');
+  const errorText = document.getElementById('error-text');
+  const submitBtn = document.getElementById('submit-btn');
+  const btnText = document.getElementById('btn-text');
+  const btnSpinner = document.getElementById('btn-spinner');
+  const togglePwd = document.getElementById('toggle-password');
+
+  togglePwd.addEventListener('click', () => {
+    const isPass = passwordInput.type === 'password';
+    passwordInput.type = isPass ? 'text' : 'password';
+    togglePwd.querySelector('.material-symbols-outlined').textContent = isPass ? 'visibility_off' : 'visibility';
+  });
+
+  document.getElementById('google-btn').addEventListener('click', () => showToast('Google auth coming soon!', 'info'));
+  document.getElementById('github-btn').addEventListener('click', () => showToast('GitHub auth coming soon!', 'info'));
+
+  function setLoading(loading) {
+    submitBtn.disabled = loading;
+    btnText.textContent = loading ? 'Signing in...' : 'Log In';
+    btnSpinner.classList.toggle('hidden', !loading);
+  }
+
+  function showError(msg) {
+    errorText.textContent = msg;
+    errorBanner.classList.remove('hidden');
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBanner.classList.add('hidden');
+    setLoading(true);
+
+    try {
+      await api.login({ email: emailInput.value.trim(), password: passwordInput.value });
+      showToast('Welcome back! Redirecting...', 'success');
+      setTimeout(() => { window.location.href = 'stitch-dashboard.html'; }, 800);
+    } catch (err) {
+      showError(err.message || 'Login failed. Check your credentials.');
+      setLoading(false);
+    }
+  });
+</script>
+</body>
+</html>
