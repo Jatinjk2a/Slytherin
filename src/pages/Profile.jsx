@@ -1,7 +1,8 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function Profile() {
+  const navigate = useNavigate()
   return (
     <>
       
@@ -21,7 +22,7 @@ export default function Profile() {
 <h2 className="text-2xl font-extrabold tracking-tight text-on-surface">Alex Rivera</h2>
 <p className="text-zinc-500 font-medium">Pro Curator</p>
 </div>
-<button className="bg-[#cfb095] text-white px-8 py-3 rounded-2xl font-bold tracking-wide flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-[#cfb095]/20">
+<button onClick={() => navigate('/settings')} className="bg-[#cfb095] text-white px-8 py-3 rounded-2xl font-bold tracking-wide flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-[#cfb095]/20">
                 EDIT PROFILE
             </button>
 </section>
@@ -59,14 +60,14 @@ export default function Profile() {
 </div>
 <div className="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
 <span className="text-xs text-zinc-400">Renews on Oct 12, 2024</span>
-<span className="text-xs font-bold text-[#cfb095]">MANAGE</span>
+<span onClick={() => navigate('/settings/billing')} className="text-xs font-bold text-[#cfb095] cursor-pointer hover:underline">MANAGE</span>
 </div>
 </section>
       {/* Activity Section */}
 <section className="space-y-4">
 <div className="flex justify-between items-center px-1">
 <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Public README Activity</h3>
-<span className="text-[10px] font-bold text-primary">VIEW ALL</span>
+<span onClick={() => navigate('/history')} className="text-[10px] font-bold text-primary cursor-pointer hover:underline">VIEW ALL</span>
 </div>
 <div className="space-y-3">
         {/* Activity Item 1 */}

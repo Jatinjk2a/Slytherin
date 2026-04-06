@@ -41,10 +41,11 @@ export function AppProvider({ children }) {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentPrompt, setCurrentPrompt] = useState("");
+  const [generationDone, setGenerationDone] = useState(false);
 
   const generateReadme = (url) => {
+    setGenerationDone(false);
     setIsGenerating(true);
-    // Simulate generation delay
     setTimeout(() => {
       const newEntry = {
         id: Date.now(),
@@ -55,6 +56,7 @@ export function AppProvider({ children }) {
       };
       setHistory(prev => [newEntry, ...prev]);
       setIsGenerating(false);
+      setGenerationDone(true);
     }, 2500);
   };
 
@@ -66,6 +68,8 @@ export function AppProvider({ children }) {
     history,
     setHistory,
     isGenerating,
+    generationDone,
+    setGenerationDone,
     generateReadme,
     currentPrompt,
     setCurrentPrompt

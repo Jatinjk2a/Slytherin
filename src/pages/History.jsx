@@ -1,7 +1,22 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import { useApp } from "@/context/AppProvider"
 
 export default function History() {
+  const { history, setHistory } = useApp()
+
+  const handleDelete = (id) => {
+    setHistory(prev => prev.filter(item => item.id !== id))
+  }
+
+  const handleExportAll = () => {
+    alert('Export feature coming soon!')
+  }
+
+  const handleLoadMore = () => {
+    alert('No older generations to load.')
+  }
+
   return (
     <>
       
@@ -71,97 +86,39 @@ export default function History() {
 {/* Table/List Header */}
 <div className="col-span-12 flex justify-between items-center mt-8 px-4">
 <h3 className="font-headline text-xl font-extrabold text-zinc-900">Previous Collections</h3>
-<button className="text-[#cfb095] text-xs font-bold flex items-center gap-2 hover:underline">
+<button onClick={handleExportAll} className="text-[#cfb095] text-xs font-bold flex items-center gap-2 hover:underline">
                     EXPORT ALL <span className="material-symbols-outlined text-sm" data-icon="download">download</span>
 </button>
 </div>
-{/* Project Entry Row 1 */}
-<div className="col-span-12 group">
+{/* Project Rows - dynamic from context */}
+{history.map((item) => (
+<div key={item.id} className="col-span-12 group">
 <div className="bg-white hover:bg-zinc-50 transition-all rounded-xl p-6 flex items-center gap-6 border-b-0">
 <div className="w-12 h-12 bg-zinc-100 rounded-xl flex items-center justify-center text-[#cfb095] group-hover:bg-white transition-colors">
 <span className="material-symbols-outlined" data-icon="source">source</span>
 </div>
 <div className="flex-1">
-<h4 className="font-bold text-zinc-900 tracking-tight">Nova-Auth-Service</h4>
-<p className="text-xs text-zinc-500">Typescript • Microservice Architecture</p>
-</div>
-<div className="w-40 text-right">
-<p className="text-xs text-zinc-400 uppercase font-bold tracking-tighter mb-0.5">Date</p>
-<p className="text-sm font-medium text-zinc-700">Oct 18, 2023</p>
+<h4 className="font-bold text-zinc-900 tracking-tight">{item.name}</h4>
+<p className="text-xs text-zinc-500">{item.time} • {item.status}</p>
 </div>
 <div className="w-32 text-right">
 <p className="text-xs text-zinc-400 uppercase font-bold tracking-tighter mb-0.5">Score</p>
-<p className="text-sm font-black text-zinc-900">92%</p>
+<p className="text-sm font-black text-zinc-900">{item.score}%</p>
 </div>
 <div className="flex gap-2">
-<button className="p-2 hover:bg-[#cfb095]/10 text-zinc-400 hover:text-[#cfb095] rounded-lg transition-colors">
+<button onClick={() => alert(`Edit: ${item.name}`)} className="p-2 hover:bg-[#cfb095]/10 text-zinc-400 hover:text-[#cfb095] rounded-lg transition-colors">
 <span className="material-symbols-outlined text-xl" data-icon="edit">edit</span>
 </button>
-<button className="p-2 hover:bg-red-50 text-zinc-400 hover:text-red-500 rounded-lg transition-colors">
+<button onClick={() => handleDelete(item.id)} className="p-2 hover:bg-red-50 text-zinc-400 hover:text-red-500 rounded-lg transition-colors">
 <span className="material-symbols-outlined text-xl" data-icon="delete">delete</span>
 </button>
 </div>
 </div>
 </div>
-{/* Project Entry Row 2 */}
-<div className="col-span-12 group">
-<div className="bg-white hover:bg-zinc-50 transition-all rounded-xl p-6 flex items-center gap-6 border-b-0">
-<div className="w-12 h-12 bg-zinc-100 rounded-xl flex items-center justify-center text-[#cfb095] group-hover:bg-white transition-colors">
-<span className="material-symbols-outlined" data-icon="database">database</span>
-</div>
-<div className="flex-1">
-<h4 className="font-bold text-zinc-900 tracking-tight">Prisma-Relay-Worker</h4>
-<p className="text-xs text-zinc-500">Go • Postgres Database Layer</p>
-</div>
-<div className="w-40 text-right">
-<p className="text-xs text-zinc-400 uppercase font-bold tracking-tighter mb-0.5">Date</p>
-<p className="text-sm font-medium text-zinc-700">Oct 12, 2023</p>
-</div>
-<div className="w-32 text-right">
-<p className="text-xs text-zinc-400 uppercase font-bold tracking-tighter mb-0.5">Score</p>
-<p className="text-sm font-black text-zinc-900">88%</p>
-</div>
-<div className="flex gap-2">
-<button className="p-2 hover:bg-[#cfb095]/10 text-zinc-400 hover:text-[#cfb095] rounded-lg transition-colors">
-<span className="material-symbols-outlined text-xl" data-icon="edit">edit</span>
-</button>
-<button className="p-2 hover:bg-red-50 text-zinc-400 hover:text-red-500 rounded-lg transition-colors">
-<span className="material-symbols-outlined text-xl" data-icon="delete">delete</span>
-</button>
-</div>
-</div>
-</div>
-{/* Project Entry Row 3 */}
-<div className="col-span-12 group">
-<div className="bg-white hover:bg-zinc-50 transition-all rounded-xl p-6 flex items-center gap-6 border-b-0">
-<div className="w-12 h-12 bg-zinc-100 rounded-xl flex items-center justify-center text-[#cfb095] group-hover:bg-white transition-colors">
-<span className="material-symbols-outlined" data-icon="cloud">cloud</span>
-</div>
-<div className="flex-1">
-<h4 className="font-bold text-zinc-900 tracking-tight">Azure-Function-Proxies</h4>
-<p className="text-xs text-zinc-500">C# • Serverless Logic</p>
-</div>
-<div className="w-40 text-right">
-<p className="text-xs text-zinc-400 uppercase font-bold tracking-tighter mb-0.5">Date</p>
-<p className="text-sm font-medium text-zinc-700">Oct 05, 2023</p>
-</div>
-<div className="w-32 text-right">
-<p className="text-xs text-zinc-400 uppercase font-bold tracking-tighter mb-0.5">Score</p>
-<p className="text-sm font-black text-zinc-900">95%</p>
-</div>
-<div className="flex gap-2">
-<button className="p-2 hover:bg-[#cfb095]/10 text-zinc-400 hover:text-[#cfb095] rounded-lg transition-colors">
-<span className="material-symbols-outlined text-xl" data-icon="edit">edit</span>
-</button>
-<button className="p-2 hover:bg-red-50 text-zinc-400 hover:text-red-500 rounded-lg transition-colors">
-<span className="material-symbols-outlined text-xl" data-icon="delete">delete</span>
-</button>
-</div>
-</div>
-</div>
+))}
 {/* Loading/Load More Trigger */}
 <div className="col-span-12 flex justify-center py-12">
-<button className="group flex flex-col items-center gap-2">
+<button onClick={handleLoadMore} className="group flex flex-col items-center gap-2">
 <div className="w-10 h-10 rounded-full bg-zinc-50 flex items-center justify-center group-hover:bg-zinc-100 transition-colors">
 <span className="material-symbols-outlined text-zinc-400 group-hover:text-zinc-600" data-icon="expand_more">expand_more</span>
 </div>

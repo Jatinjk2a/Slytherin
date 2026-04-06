@@ -1,7 +1,8 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function CodeExplain() {
+  const navigate = useNavigate()
   return (
     <>
       
@@ -9,7 +10,7 @@ export default function CodeExplain() {
 <header className="fixed top-0 left-0 w-full z-50 flex items-center px-4 h-16 bg-white dark:bg-zinc-950 rounded-b-2xl">
 <div className="flex items-center w-full justify-between">
 <div className="flex items-center gap-4">
-<button className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors active:scale-95 duration-200">
+<button onClick={() => navigate(-1)} className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors active:scale-95 duration-200">
 <span className="material-symbols-outlined text-indigo-600 dark:text-indigo-400">arrow_back</span>
 </button>
 <h1 className="font-['Manrope'] font-bold text-lg tracking-tight text-zinc-900 dark:text-zinc-100">File: App.jsx</h1>
@@ -131,22 +132,22 @@ export default function CodeExplain() {
 </main>
 
 <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-6 pt-2 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl rounded-t-[1.5rem] border-t border-zinc-200/15 dark:border-zinc-800/15 shadow-[0px_-20px_40px_rgba(0,0,0,0.05)]">
-<a className="flex flex-col items-center justify-center bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-xl p-3 active:scale-90 transition-transform" href="#">
+<Link to="/explain" className="flex flex-col items-center justify-center bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-xl p-3 active:scale-90 transition-transform">
 <span className="material-symbols-outlined">code</span>
 <span className="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">Explain</span>
-</a>
-<a className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform" href="#">
+</Link>
+<Link to="/dashboard" className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform">
 <span className="material-symbols-outlined">terminal</span>
 <span className="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">Terminal</span>
-</a>
-<a className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform" href="#">
+</Link>
+<Link to="/history" className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform">
 <span className="material-symbols-outlined">history</span>
 <span className="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">History</span>
-</a>
-<a className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform" href="#">
+</Link>
+<Link to="/settings" className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 p-3 hover:text-indigo-500 dark:hover:text-indigo-300 active:scale-90 transition-transform">
 <span className="material-symbols-outlined">settings</span>
 <span className="font-['Inter'] text-[10px] uppercase tracking-widest mt-1">Settings</span>
-</a>
+</Link>
 </nav>
 
     </>

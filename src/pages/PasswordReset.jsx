@@ -1,7 +1,15 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function PasswordReset() {
+  const navigate = useNavigate()
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    alert('Reset link sent! Check your email.')
+    navigate('/login')
+  }
+
   return (
     <>
       
@@ -22,7 +30,7 @@ export default function PasswordReset() {
                 </p>
 </div>
 
-<form className="space-y-6" onsubmit="return false;">
+<form className="space-y-6" onSubmit={handleSubmit}>
 <div className="space-y-2">
 <label className="font-label text-xs font-semibold uppercase tracking-wider text-outline px-1" htmlFor="email">Email Address</label>
 <div className="relative group">
@@ -53,7 +61,7 @@ export default function PasswordReset() {
 </div>
 
 <div className="text-center">
-<a className="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-hazelnut transition-colors font-medium" href="#">
+<a className="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-hazelnut transition-colors font-medium" onClick={() => navigate('/login')} style={{cursor:'pointer'}}>
                     Wait, I remember it! <span className="text-hazelnut font-bold">Log In</span>
 </a>
 </div>

@@ -1,7 +1,13 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function Curator() {
+  const navigate = useNavigate()
+  const [fixes, setFixes] = useState({ license: true, contributing: false, apiTable: true })
+
+  const handleRegenerate = () => alert('Regenerating README...')
+  const handleApplyAll = () => alert('Applying all selected fixes...')
+  const toggleFix = (key) => setFixes(prev => ({ ...prev, [key]: !prev[key] }))
   return (
     <>
       
@@ -39,7 +45,7 @@ export default function Curator() {
 <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-zinc-900">README Analysis: Lucid Flow Engine</h1>
 <p className="text-zinc-500 text-lg">Detailed audit of documentation health for <span className="font-mono text-sm bg-zinc-100 px-2 py-0.5 rounded">v2.4.0-stable</span></p>
 </div>
-<button className="px-8 py-4 bg-hazelnut text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:opacity-95 transition-all shadow-lg shadow-hazelnut/20 active:scale-95 text-lg">
+<button onClick={handleRegenerate} className="px-8 py-4 bg-hazelnut text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:opacity-95 transition-all shadow-lg shadow-hazelnut/20 active:scale-95 text-lg">
 <span className="material-symbols-outlined">refresh</span>
                     Regenerate README
                 </button>
@@ -135,12 +141,12 @@ export default function Curator() {
 <p className="text-zinc-400 text-sm">Select changes to apply automatically</p>
 </div>
 </div>
-<button className="text-hazelnut font-bold text-sm hover:underline">Apply All Selected</button>
+<button onClick={handleApplyAll} className="text-hazelnut font-bold text-sm hover:underline">Apply All Selected</button>
 </div>
 <div className="space-y-4">
 <label className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
 <div className="flex items-center gap-4">
-<input checked="" className="w-5 h-5 rounded border-white/20 bg-transparent text-hazelnut focus:ring-hazelnut" type="checkbox"/>
+<input checked={fixes.license} onChange={() => toggleFix('license')} className="w-5 h-5 rounded border-white/20 bg-transparent text-hazelnut focus:ring-hazelnut" type="checkbox"/>
 <div className="flex flex-col">
 <span className="font-semibold">Auto-generate MIT License file</span>
 <span className="text-xs text-zinc-500 italic">Adds LICENSE.md to root directory</span>
@@ -150,7 +156,7 @@ export default function Curator() {
 </label>
 <label className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
 <div className="flex items-center gap-4">
-<input className="w-5 h-5 rounded border-white/20 bg-transparent text-hazelnut focus:ring-hazelnut" type="checkbox"/>
+<input checked={fixes.contributing} onChange={() => toggleFix('contributing')} className="w-5 h-5 rounded border-white/20 bg-transparent text-hazelnut focus:ring-hazelnut" type="checkbox"/>
 <div className="flex flex-col">
 <span className="font-semibold">Expand Contributing Guide</span>
 <span className="text-xs text-zinc-500 italic">Adds PR templates and code style rules</span>
@@ -160,7 +166,7 @@ export default function Curator() {
 </label>
 <label className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
 <div className="flex items-center gap-4">
-<input checked="" className="w-5 h-5 rounded border-white/20 bg-transparent text-hazelnut focus:ring-hazelnut" type="checkbox"/>
+<input checked={fixes.apiTable} onChange={() => toggleFix('apiTable')} className="w-5 h-5 rounded border-white/20 bg-transparent text-hazelnut focus:ring-hazelnut" type="checkbox"/>
 <div className="flex flex-col">
 <span className="font-semibold">Fix API Table Formatting</span>
 <span className="text-xs text-zinc-500 italic">Standardizes column widths for readability</span>
@@ -255,22 +261,22 @@ export default function Curator() {
 </main>
 {/* Navigation Overlay for Mobile */}
 <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-zinc-100 flex items-center justify-around z-50">
-<a className="flex flex-col items-center justify-center text-zinc-400" href="#">
+<Link to="/dashboard" className="flex flex-col items-center justify-center text-zinc-400">
 <span className="material-symbols-outlined">home</span>
 <span className="text-[10px] font-bold">Home</span>
-</a>
-<a className="flex flex-col items-center justify-center text-hazelnut" href="#">
+</Link>
+<Link to="/history" className="flex flex-col items-center justify-center text-hazelnut">
 <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>history</span>
 <span className="text-[10px] font-bold">History</span>
-</a>
-<a className="flex flex-col items-center justify-center text-zinc-400" href="#">
+</Link>
+<Link to="/settings" className="flex flex-col items-center justify-center text-zinc-400">
 <span className="material-symbols-outlined">settings</span>
 <span className="text-[10px] font-bold">Settings</span>
-</a>
-<a className="flex flex-col items-center justify-center text-zinc-400" href="#">
+</Link>
+<Link to="/settings/billing" className="flex flex-col items-center justify-center text-zinc-400">
 <span className="material-symbols-outlined">auto_awesome</span>
 <span className="text-[10px] font-bold">Upgrade</span>
-</a>
+</Link>
 </nav>
 
     </>

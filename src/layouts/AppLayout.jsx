@@ -10,7 +10,7 @@ export default function AppLayout() {
         <Outlet />
       {/* Global Mobile Navigation Overlay */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-zinc-100 flex items-center justify-around z-50">
-      <Link className="flex flex-col items-center justify-center text-zinc-400 hover:text-indigo-500" to="/">
+      <Link className="flex flex-col items-center justify-center text-zinc-400 hover:text-indigo-500" to="/dashboard">
       <span className="material-symbols-outlined">home</span>
       <span className="text-[10px] font-bold">Home</span>
       </Link>

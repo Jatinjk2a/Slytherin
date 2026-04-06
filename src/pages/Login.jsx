@@ -44,11 +44,11 @@ export default function Login() {
 </div>
 </div>
 <div className="grid grid-cols-2 gap-4">
-<button className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl ring-1 ring-outline-variant/30 hover:bg-surface-container-low transition-all text-sm font-medium text-on-surface">
+<button onClick={() => alert('Google OAuth coming soon!')} className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl ring-1 ring-outline-variant/30 hover:bg-surface-container-low transition-all text-sm font-medium text-on-surface">
 <span className="material-symbols-outlined text-xl" data-icon="brand_family_google">google</span>
                     Google
                 </button>
-<button className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl ring-1 ring-outline-variant/30 hover:bg-surface-container-low transition-all text-sm font-medium text-on-surface">
+<button onClick={() => alert('GitHub OAuth coming soon!')} className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl ring-1 ring-outline-variant/30 hover:bg-surface-container-low transition-all text-sm font-medium text-on-surface">
 <span className="material-symbols-outlined text-xl" data-icon="code">code</span>
                     GitHub
                 </button>

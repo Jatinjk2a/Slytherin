@@ -1,7 +1,20 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function Setup() {
+  const navigate = useNavigate()
+  const [tone, setTone] = useState('Technical')
+  const [ignorePaths, setIgnorePaths] = useState(['node_modules/', '.env', 'build/'])
+  const [newPath, setNewPath] = useState('')
+
+  const handleAddPath = () => {
+    if (newPath.trim()) {
+      setIgnorePaths(prev => [...prev, newPath.trim()])
+      setNewPath('')
+    }
+  }
+  const handleRemovePath = (path) => setIgnorePaths(prev => prev.filter(p => p !== path))
+  const handleSave = () => alert('Configuration saved!')
   return (
     <>
       
@@ -33,17 +46,17 @@ export default function Setup() {
 </div>
 <div className="flex flex-wrap gap-3">
 
-<button className="flex items-center gap-2 px-4 py-2 rounded-full bg-hazelnut text-white font-medium text-sm transition-all shadow-md shadow-hazelnut/20">
+<button onClick={() => setTone('Technical')} className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all shadow-md ${tone === 'Technical' ? 'bg-hazelnut text-white shadow-hazelnut/20' : 'bg-white border border-slate-200 text-slate-600 hover:border-hazelnut/50'}`}>
 <span className="material-symbols-outlined text-[18px]">code</span>
                     Technical
                 </button>
 
-<button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-600 font-medium text-sm hover:border-hazelnut/50 transition-colors">
+<button onClick={() => setTone('Conversational')} className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all ${tone === 'Conversational' ? 'bg-hazelnut text-white shadow-md shadow-hazelnut/20' : 'bg-white border border-slate-200 text-slate-600 hover:border-hazelnut/50'}`}>
 <span className="material-symbols-outlined text-[18px]">chat_bubble</span>
                     Conversational
                 </button>
 
-<button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-600 font-medium text-sm hover:border-hazelnut/50 transition-colors">
+<button onClick={() => setTone('Minimalist')} className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all ${tone === 'Minimalist' ? 'bg-hazelnut text-white shadow-md shadow-hazelnut/20' : 'bg-white border border-slate-200 text-slate-600 hover:border-hazelnut/50'}`}>
 <span className="material-symbols-outlined text-[18px]">short_text</span>
                     Minimalist
                 </button>
@@ -59,47 +72,28 @@ export default function Setup() {
 <h3 className="font-headline font-bold text-slate-800">Ignore Paths</h3>
 </div>
 <div className="relative mb-6">
-<input className="w-full bg-white border-none ring-1 ring-slate-200 focus:ring-2 focus:ring-hazelnut rounded-xl px-4 py-3 text-sm font-body text-slate-700 transition-all outline-none" placeholder="Add path (e.g. docs/*.md)" type="text"/>
-<button className="absolute right-2 top-2 w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-hazelnut hover:text-white transition-colors">
+<input value={newPath} onChange={(e) => setNewPath(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleAddPath()} className="w-full bg-white border-none ring-1 ring-slate-200 focus:ring-2 focus:ring-hazelnut rounded-xl px-4 py-3 text-sm font-body text-slate-700 transition-all outline-none" placeholder="Add path (e.g. docs/*.md)" type="text"/>
+<button onClick={handleAddPath} className="absolute right-2 top-2 w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-hazelnut hover:text-white transition-colors">
 <span className="material-symbols-outlined">add</span>
 </button>
 </div>
 <div className="space-y-3">
-
-<div className="flex items-center justify-between p-3 bg-white rounded-xl ring-1 ring-slate-100">
+{ignorePaths.map((path) => (
+<div key={path} className="flex items-center justify-between p-3 bg-white rounded-xl ring-1 ring-slate-100">
 <div className="flex items-center gap-3">
 <span className="material-symbols-outlined text-slate-400 text-[20px]">folder</span>
-<code className="font-mono text-xs text-slate-600">node_modules/</code>
+<code className="font-mono text-xs text-slate-600">{path}</code>
 </div>
-<button className="text-slate-300 hover:text-red-400 transition-colors">
+<button onClick={() => handleRemovePath(path)} className="text-slate-300 hover:text-red-400 transition-colors">
 <span className="material-symbols-outlined text-[18px]">close</span>
 </button>
 </div>
-
-<div className="flex items-center justify-between p-3 bg-white rounded-xl ring-1 ring-slate-100">
-<div className="flex items-center gap-3">
-<span className="material-symbols-outlined text-slate-400 text-[20px]">description</span>
-<code className="font-mono text-xs text-slate-600">.env</code>
-</div>
-<button className="text-slate-300 hover:text-red-400 transition-colors">
-<span className="material-symbols-outlined text-[18px]">close</span>
-</button>
-</div>
-
-<div className="flex items-center justify-between p-3 bg-white rounded-xl ring-1 ring-slate-100">
-<div className="flex items-center gap-3">
-<span className="material-symbols-outlined text-slate-400 text-[20px]">inventory_2</span>
-<code className="font-mono text-xs text-slate-600">build/</code>
-</div>
-<button className="text-slate-300 hover:text-red-400 transition-colors">
-<span className="material-symbols-outlined text-[18px]">close</span>
-</button>
-</div>
+))}
 </div>
 </section>
 
 <section className="pt-4 pb-10">
-<button className="w-full hazelnut-gradient text-white font-headline font-bold py-4 rounded-2xl shadow-xl shadow-hazelnut/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+<button onClick={handleSave} className="w-full hazelnut-gradient text-white font-headline font-bold py-4 rounded-2xl shadow-xl shadow-hazelnut/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
 <span className="material-symbols-outlined">save</span>
                 SAVE CONFIGURATION
             </button>
@@ -109,25 +103,25 @@ export default function Setup() {
 <nav className="fixed bottom-0 left-0 w-full bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-2xl rounded-t-[1.5rem] z-50 shadow-[0px_-10px_30px_rgba(0,0,0,0.05)]">
 <div className="flex justify-around items-center px-4 pb-6 pt-2">
 
-<a className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors" href="#">
+<Link to="/dashboard" className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors">
 <span className="material-symbols-outlined">folder_open</span>
 <span className="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Projects</span>
-</a>
+</Link>
 
-<a className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors" href="#">
+<Link to="/dashboard" className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors">
 <span className="material-symbols-outlined">auto_awesome</span>
 <span className="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Generate</span>
-</a>
+</Link>
 
-<a className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors" href="#">
+<Link to="/history" className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-3 hover:text-indigo-500 transition-colors">
 <span className="material-symbols-outlined">history</span>
 <span className="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">History</span>
-</a>
+</Link>
 
-<a className="flex flex-col items-center justify-center bg-indigo-100/50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-xl p-3 active:scale-90 transition-transform duration-300 ease-out" href="#">
+<Link to="/settings" className="flex flex-col items-center justify-center bg-indigo-100/50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-xl p-3 active:scale-90 transition-transform duration-300 ease-out">
 <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>settings</span>
 <span className="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Settings</span>
-</a>
+</Link>
 </div>
 </nav>
 

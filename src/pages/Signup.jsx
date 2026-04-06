@@ -67,7 +67,7 @@ export default function Signup() {
 <div className="mt-auto">
 <p className="text-sm text-zinc-500">
                     Already have an account? 
-                    <a className="text-brand-hazel font-bold hover:underline decoration-2 underline-offset-4" href="#">Log In</a>
+                    <Link className="text-brand-hazel font-bold hover:underline decoration-2 underline-offset-4" to="/login">Log In</Link>
 </p>
 </div>
 </div>

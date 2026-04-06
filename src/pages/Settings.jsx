@@ -1,8 +1,14 @@
 import React from "react"
+import { useNavigate } from "react-router-dom"
 import { useApp } from "@/context/AppProvider"
 
 export default function Settings() {
   const { user, setUser, theme, toggleTheme } = useApp()
+  const navigate = useNavigate()
+
+  const handleSaveProfile = () => {
+    alert('Profile saved!')
+  }
 
   return (
     <>
@@ -38,7 +44,7 @@ export default function Settings() {
 <input className="w-full bg-white border-0 rounded-xl px-4 py-3 focus:ring-2 focus:ring-hazelnut/20 outline-none transition-all placeholder:text-zinc-300" type="email" value="alex.rivera@readme.ai" readOnly/>
 </div>
 <div className="md:col-span-2 flex justify-end pt-4">
-<button className="px-8 py-3 bg-hazelnut text-white rounded-xl font-bold text-sm hover:opacity-90 active:scale-95 transition-all">
+<button onClick={handleSaveProfile} className="px-8 py-3 bg-hazelnut text-white rounded-xl font-bold text-sm hover:opacity-90 active:scale-95 transition-all">
                                 Save Profile
                             </button>
 </div>
@@ -136,7 +142,7 @@ export default function Settings() {
 </div>
 <h3 className="text-white font-headline text-2xl font-bold leading-tight mb-4">Unlimited Generations Enabled</h3>
 <p className="text-zinc-300 text-sm mb-6">Your current plan includes prioritized GPU processing and private repo support.</p>
-<button className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl font-bold text-sm hover:bg-white/20 transition-all">View Billing History</button>
+<button onClick={() => navigate('/settings/billing')} className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl font-bold text-sm hover:bg-white/20 transition-all">View Billing History</button>
 </div>
 </section>
 </div>

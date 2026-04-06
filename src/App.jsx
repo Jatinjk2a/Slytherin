@@ -31,13 +31,24 @@ function App() {
         <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
         <Route path="/history" element={<ErrorBoundary><History /></ErrorBoundary>} />
         <Route element={<ErrorBoundary><Settings /></ErrorBoundary>} path="/settings"/>
-        <Route element={<ErrorBoundary><Billing /></ErrorBoundary>} path="/settings/billing"/>
-        <Route element={<ErrorBoundary><Curator /></ErrorBoundary>} path="/curator"/>
         <Route element={<ErrorBoundary><Profile /></ErrorBoundary>} path="/profile"/>
-        <Route element={<ErrorBoundary><Setup /></ErrorBoundary>} path="/setup"/>
-        <Route element={<ErrorBoundary><CodeExplain /></ErrorBoundary>} path="/explain"/>
-        <Route element={<ErrorBoundary><Score /></ErrorBoundary>} path="/score"/>
       </Route>
+
+      {/* Full-screen pages with their own headers (no sidebar) */}
+      <Route element={<ErrorBoundary><Billing /></ErrorBoundary>} path="/settings/billing"/>
+      <Route element={<ErrorBoundary><Curator /></ErrorBoundary>} path="/curator"/>
+      <Route element={<ErrorBoundary><Setup /></ErrorBoundary>} path="/setup"/>
+      <Route element={<ErrorBoundary><CodeExplain /></ErrorBoundary>} path="/explain"/>
+      <Route element={<ErrorBoundary><Score /></ErrorBoundary>} path="/score"/>
+
+      {/* 404 catch-all */}
+      <Route path="*" element={
+        <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+          <span className="text-6xl font-black text-zinc-200">404</span>
+          <p className="text-zinc-500 font-medium">Page not found</p>
+          <a href="/dashboard" className="text-sm font-bold text-[#cfb095] hover:underline">Go to Dashboard</a>
+        </div>
+      } />
     </Routes>
   )
 }

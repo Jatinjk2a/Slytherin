@@ -1,7 +1,8 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function Score() {
+  const navigate = useNavigate()
   return (
     <>
       
@@ -9,7 +10,7 @@ export default function Score() {
 <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl">
 <div className="flex items-center justify-between px-6 h-16 w-full">
 <div className="flex items-center gap-4">
-<span className="material-symbols-outlined text-hazelnut active:scale-95 transition-transform duration-200 cursor-pointer" data-icon="arrow_back">arrow_back</span>
+<span onClick={() => navigate(-1)} className="material-symbols-outlined text-hazelnut active:scale-95 transition-transform duration-200 cursor-pointer" data-icon="arrow_back">arrow_back</span>
 <h1 className="font-headline font-bold text-lg tracking-tight">Project Health</h1>
 </div>
 <div className="flex items-center">
@@ -93,7 +94,7 @@ export default function Score() {
 <span className="text-hazelnut text-[10px] font-bold uppercase tracking-widest">AI Insight</span>
 </div>
 <p className="text-white font-headline font-semibold text-lg leading-snug">Boost score to 98% by refining the 'Installation' section.</p>
-<button className="mt-4 bg-hazelnut text-white px-4 py-2 rounded-xl font-label text-xs font-bold uppercase tracking-widest active:scale-95 transition-transform">Optimize Now</button>
+<button onClick={() => alert('Optimization tips applied!')} className="mt-4 bg-hazelnut text-white px-4 py-2 rounded-xl font-label text-xs font-bold uppercase tracking-widest active:scale-95 transition-transform">Optimize Now</button>
 </div>
 <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
 <span className="material-symbols-outlined text-white text-9xl" data-icon="insights">insights</span>
@@ -102,21 +103,18 @@ export default function Score() {
 </main>
 
 <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pt-3 pb-8 bg-white/80 backdrop-blur-2xl z-50 rounded-t-[24px] shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
-
-<button className="flex flex-col items-center justify-center text-slate-500 px-5 py-2 active:scale-90 transition-all duration-300 ease-out hover:text-hazelnut">
+<Link to="/dashboard" className="flex flex-col items-center justify-center text-slate-500 px-5 py-2 active:scale-90 transition-all duration-300 ease-out hover:text-hazelnut">
 <span className="material-symbols-outlined mb-1" data-icon="folder_open">folder_open</span>
 <span className="font-inter text-[11px] font-semibold tracking-wide uppercase">Projects</span>
-</button>
-
+</Link>
 <button className="flex flex-col items-center justify-center bg-hazelnut/10 text-hazelnut rounded-2xl px-5 py-2 active:scale-90 transition-all duration-300 ease-out">
 <span className="material-symbols-outlined mb-1" data-icon="insights" style={{fontVariationSettings: "'FILL' 1"}}>insights</span>
 <span className="font-inter text-[11px] font-semibold tracking-wide uppercase">Stats</span>
 </button>
-
-<button className="flex flex-col items-center justify-center text-slate-500 px-5 py-2 active:scale-90 transition-all duration-300 ease-out hover:text-hazelnut">
+<Link to="/settings" className="flex flex-col items-center justify-center text-slate-500 px-5 py-2 active:scale-90 transition-all duration-300 ease-out hover:text-hazelnut">
 <span className="material-symbols-outlined mb-1" data-icon="settings">settings</span>
 <span className="font-inter text-[11px] font-semibold tracking-wide uppercase">Settings</span>
-</button>
+</Link>
 </nav>
 
     </>

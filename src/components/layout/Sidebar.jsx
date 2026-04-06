@@ -1,7 +1,8 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function Sidebar() {
+  const navigate = useNavigate()
   return (
     <aside className="hidden md:flex fixed left-0 top-0 h-full flex-col p-4 z-50 bg-white w-64 border-r border-[#f4ebe1] font-['Manrope'] tracking-tight transition-all duration-200">
       <div className="mb-10 px-4">
@@ -9,7 +10,7 @@ export default function Sidebar() {
         <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">The Digital Curator</p>
       </div>
       <div className="px-4 mb-8">
-        <button className="w-full py-3 px-4 bg-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95 shadow-sm shadow-primary/20">
+        <button onClick={() => navigate('/dashboard')} className="w-full py-3 px-4 bg-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95 shadow-sm shadow-primary/20">
           <span className="material-symbols-outlined text-[20px]">add_circle</span>
           New Project
         </button>

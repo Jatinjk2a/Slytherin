@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import Navbar from "@/components/layout/Navbar"
 import PreviewPanel from "@/components/layout/PreviewPanel"
 import { useApp } from "@/context/AppProvider"
 
 export default function Dashboard() {
-  const { currentPrompt, setCurrentPrompt, isGenerating, generateReadme } = useApp()
+  const { currentPrompt, setCurrentPrompt, isGenerating, generateReadme, generationDone, setGenerationDone } = useApp()
   const navigate = useNavigate()
 
   const handleEngage = (e) => {
@@ -14,15 +14,13 @@ export default function Dashboard() {
     generateReadme(currentPrompt)
   }
 
-  // Navigate to curator once generation finishes
+  // Navigate to curator once generation completes
   useEffect(() => {
-    if (isGenerating) {
-      const timer = setTimeout(() => {
-        navigate('/curator')
-      }, 2500)
-      return () => clearTimeout(timer)
+    if (generationDone) {
+      setGenerationDone(false)
+      navigate('/curator')
     }
-  }, [isGenerating, navigate])
+  }, [generationDone, navigate, setGenerationDone])
   return (
     <>
       <div className="flex flex-1 flex-col relative bg-white h-full">

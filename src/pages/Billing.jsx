@@ -1,14 +1,19 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function Billing() {
+  const navigate = useNavigate()
+
+  const handleDownloadInvoice = () => alert('Invoice download coming soon!')
+  const handleCancelPlan = () => { if (window.confirm('Are you sure you want to cancel your plan?')) alert('Plan cancellation requested.') }
+  const handleViewTransactions = () => alert('Full transaction history coming soon!')
   return (
     <>
       
 
 <header className="w-full sticky top-0 z-50 bg-white dark:bg-zinc-950 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
 <div className="flex items-center gap-4">
-<button className="active:scale-95 duration-150 p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors rounded-full">
+<button onClick={() => navigate(-1)} className="active:scale-95 duration-150 p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors rounded-full">
 <span className="material-symbols-outlined text-zinc-500" data-icon="arrow_back">arrow_back</span>
 </button>
 <h1 className="font-headline font-bold text-lg tracking-tight">Billing</h1>
@@ -48,11 +53,11 @@ export default function Billing() {
 </div>
 </div>
 <div className="flex flex-col gap-4">
-<button className="w-full hazelnut-gradient text-white py-4 rounded-xl font-headline font-bold uppercase tracking-wider text-sm active:scale-95 transition-transform duration-200 flex items-center justify-center gap-2">
+<button onClick={handleDownloadInvoice} className="w-full hazelnut-gradient text-white py-4 rounded-xl font-headline font-bold uppercase tracking-wider text-sm active:scale-95 transition-transform duration-200 flex items-center justify-center gap-2">
 <span className="material-symbols-outlined text-[18px]" data-icon="download">download</span>
                         Download Invoice
                     </button>
-<button className="w-full text-zinc-400 hover:text-error transition-colors py-2 text-xs font-medium uppercase tracking-widest">
+<button onClick={handleCancelPlan} className="w-full text-zinc-400 hover:text-error transition-colors py-2 text-xs font-medium uppercase tracking-widest">
                         Cancel Plan
                     </button>
 </div>
@@ -99,7 +104,7 @@ export default function Billing() {
 </div>
 </div>
 <div className="flex justify-center pt-4">
-<button className="text-hazelnut text-sm font-semibold flex items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
+<button onClick={handleViewTransactions} className="text-hazelnut text-sm font-semibold flex items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
                     View all transactions
                     <span className="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
 </button>
@@ -121,22 +126,22 @@ export default function Billing() {
 </main>
 
 <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-xl z-50 border-t border-zinc-100 dark:border-zinc-800 shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
-<a className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-indigo-500 transition-transform duration-200 active:scale-90" href="#">
+<Link to="/dashboard" className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-indigo-500 transition-transform duration-200 active:scale-90">
 <span className="material-symbols-outlined mb-1" data-icon="code">code</span>
 <span className="font-inter text-[11px] font-medium tracking-wide uppercase">Projects</span>
-</a>
-<a className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-indigo-500 transition-transform duration-200 active:scale-90" href="#">
+</Link>
+<Link to="/score" className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-indigo-500 transition-transform duration-200 active:scale-90">
 <span className="material-symbols-outlined mb-1" data-icon="bar_chart">bar_chart</span>
 <span className="font-inter text-[11px] font-medium tracking-wide uppercase">Usage</span>
-</a>
-<a className="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20 rounded-xl px-3 py-1 transition-transform duration-200 active:scale-90" href="#">
+</Link>
+<Link to="/settings/billing" className="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20 rounded-xl px-3 py-1 transition-transform duration-200 active:scale-90">
 <span className="material-symbols-outlined mb-1" data-icon="payments" style={{fontVariationSettings: "'FILL' 1"}}>payments</span>
 <span className="font-inter text-[11px] font-medium tracking-wide uppercase">Billing</span>
-</a>
-<a className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-indigo-500 transition-transform duration-200 active:scale-90" href="#">
+</Link>
+<Link to="/settings" className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-indigo-500 transition-transform duration-200 active:scale-90">
 <span className="material-symbols-outlined mb-1" data-icon="settings">settings</span>
 <span className="font-inter text-[11px] font-medium tracking-wide uppercase">Settings</span>
-</a>
+</Link>
 </nav>
 
     </>
